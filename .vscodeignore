@@ -4,6 +4,7 @@
 src/**
 scripts/**
 node_modules/**
+esbuild.js
 .gitignore
 .eslintrc.json
 tsconfig.json

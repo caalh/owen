@@ -35,7 +35,7 @@ export function registerSearchReactorLibrary(): vscode.Disposable {
             return;
         }
 
-        const client = getSupabaseClient();
+        const client = await getSupabaseClient();
         if (!client) {
             vscode.window.showWarningMessage(
                 'OWEN: Community Library is enabled but Supabase credentials are missing. ' +
