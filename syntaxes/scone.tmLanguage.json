@@ -1,0 +1,34 @@
+{
+  "scopeName": "source.scone",
+  "name": "SCONE",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#keyword" },
+    { "include": "#block" },
+    { "include": "#number" },
+    { "include": "#string" }
+  ],
+  "repository": {
+    "comment": {
+      "match": "//.*$",
+      "name": "comment.line.double-slash.scone"
+    },
+    "keyword": {
+      "match": "\\b(type|id|origin|halfwidth|boundary|radii|fills|filltype|surfaces|cells|universes|geometry|nuclearData|materials|composition|temp|pop|active|inactive|XSdata|dataType)\\b",
+      "name": "keyword.control.scone"
+    },
+    "block": {
+      "match": "\\b\\w+\\s*\\{",
+      "name": "entity.name.section.scone"
+    },
+    "number": {
+      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.scone"
+    },
+    "string": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.quoted.double.scone"
+    }
+  }
+}

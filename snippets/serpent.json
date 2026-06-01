@@ -1,0 +1,39 @@
+{
+  "Serpent Material": {
+    "prefix": "smat",
+    "body": [
+      "mat ${1:fuel} ${2:-10.5} ${3:burn 1}",
+      "${4:92235.09c}  ${5:4.50e-02}",
+      "${6:92238.09c}  ${7:9.55e-01}"
+    ],
+    "description": "Serpent material definition"
+  },
+  "Serpent Pin": {
+    "prefix": "spin",
+    "body": [
+      "pin ${1:P1}",
+      "${2:fuel}  ${3:0.41}",
+      "${4:clad}  ${5:0.47}",
+      "${6:water}"
+    ],
+    "description": "Serpent pin definition"
+  },
+  "Serpent Lattice": {
+    "prefix": "slat",
+    "body": [
+      "lat ${1:100} 1  0.0 0.0  ${2:17} ${2:17}  ${3:1.26}",
+      "${4:fill map}"
+    ],
+    "description": "Serpent square lattice"
+  },
+  "Serpent Settings": {
+    "prefix": "sset",
+    "body": [
+      "set bc ${1:2}",
+      "set pop ${2:50000} ${3:200} ${4:50}",
+      "set power ${5:1.0e6}",
+      "set acelib \"${6:sss_endfb80.xsdata}\""
+    ],
+    "description": "Serpent simulation settings"
+  }
+}

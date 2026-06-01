@@ -1,0 +1,408 @@
+{
+  "mcnp": [
+    {
+      "path": "/mcnp/intro",
+      "title": "What is MCNP?"
+    },
+    {
+      "path": "/mcnp/first-input",
+      "title": "Input File Overview"
+    },
+    {
+      "path": "/mcnp/cell-cards",
+      "title": "Cell Cards"
+    },
+    {
+      "path": "/mcnp/surface-cards",
+      "title": "Surface Cards"
+    },
+    {
+      "path": "/mcnp/data-cards",
+      "title": "Data Cards"
+    },
+    {
+      "path": "/mcnp/materials",
+      "title": "Material Cards"
+    },
+    {
+      "path": "/mcnp/basic-shapes",
+      "title": "Basic Shapes & Surfaces"
+    },
+    {
+      "path": "/mcnp/example-pin",
+      "title": "Tutorial: Simple Pin Cell"
+    },
+    {
+      "path": "/mcnp/complex-geometries",
+      "title": "Complex Geometries"
+    },
+    {
+      "path": "/mcnp/universes-lattices",
+      "title": "Universes & Lattices"
+    },
+    {
+      "path": "/mcnp/example-assembly",
+      "title": "Tutorial: Fuel Assembly"
+    },
+    {
+      "path": "/mcnp/cross-sections",
+      "title": "Nuclear Data & Cross Sections"
+    },
+    {
+      "path": "/mcnp/physics",
+      "title": "Physics Models & Settings"
+    },
+    {
+      "path": "/mcnp/sources",
+      "title": "Source Definition"
+    },
+    {
+      "path": "/mcnp/running",
+      "title": "Running MCNP"
+    },
+    {
+      "path": "/mcnp/running-output",
+      "title": "Understanding Output Files"
+    },
+    {
+      "path": "/mcnp/tallies",
+      "title": "Setting Up Tallies"
+    },
+    {
+      "path": "/mcnp/analysis",
+      "title": "Result Analysis"
+    },
+    {
+      "path": "/mcnp/example-criticality",
+      "title": "Tutorial: Criticality Analysis"
+    },
+    {
+      "path": "/mcnp/example-shielding",
+      "title": "Tutorial: Shielding Analysis"
+    },
+    {
+      "path": "/mcnp/variance-reduction",
+      "title": "Variance Reduction"
+    },
+    {
+      "path": "/mcnp/parallel",
+      "title": "Parallel Computing"
+    },
+    {
+      "path": "/mcnp/advanced",
+      "title": "Advanced Features"
+    },
+    {
+      "path": "/mcnp/troubleshooting",
+      "title": "Troubleshooting Guide"
+    }
+  ],
+  "openmc": [
+    {
+      "path": "/openmc/intro",
+      "title": "Introduction"
+    },
+    {
+      "path": "/openmc/installation",
+      "title": "Installation"
+    },
+    {
+      "path": "/openmc/python-basics",
+      "title": "Python API Basics"
+    },
+    {
+      "path": "/openmc/geometry-basics",
+      "title": "Geometry Basics"
+    },
+    {
+      "path": "/openmc/materials",
+      "title": "Materials"
+    },
+    {
+      "path": "/openmc/cross-sections",
+      "title": "Cross Sections"
+    },
+    {
+      "path": "/openmc/cell-creation",
+      "title": "Cell Creation"
+    },
+    {
+      "path": "/openmc/surfaces",
+      "title": "Surface Types"
+    },
+    {
+      "path": "/openmc/lattices",
+      "title": "Lattices & Universes"
+    },
+    {
+      "path": "/openmc/settings",
+      "title": "Settings"
+    },
+    {
+      "path": "/openmc/sources",
+      "title": "Source Definition"
+    },
+    {
+      "path": "/openmc/tallies",
+      "title": "Tallies"
+    },
+    {
+      "path": "/openmc/running",
+      "title": "Running Simulations"
+    },
+    {
+      "path": "/openmc/statepoint",
+      "title": "StatePoint Files"
+    },
+    {
+      "path": "/openmc/plotting",
+      "title": "Plotting Results"
+    },
+    {
+      "path": "/openmc/data-processing",
+      "title": "Data Processing"
+    },
+    {
+      "path": "/openmc/depletion",
+      "title": "Depletion"
+    },
+    {
+      "path": "/openmc/multi-physics",
+      "title": "Multi-physics Coupling"
+    },
+    {
+      "path": "/openmc/parallel",
+      "title": "Parallel Computing"
+    },
+    {
+      "path": "/openmc/example-pin",
+      "title": "Example: Pin Cell"
+    },
+    {
+      "path": "/openmc/example-assembly",
+      "title": "Example: Assembly"
+    },
+    {
+      "path": "/openmc/example-reactor",
+      "title": "Example: Full Reactor"
+    }
+  ],
+  "serpent": [
+    {
+      "path": "/serpent/intro",
+      "title": "Introduction to Serpent"
+    },
+    {
+      "path": "/serpent/installation",
+      "title": "Installation Guide"
+    },
+    {
+      "path": "/serpent/workflow",
+      "title": "Basic Concepts & Workflow"
+    },
+    {
+      "path": "/serpent/first-simulation",
+      "title": "First Simple Simulation"
+    },
+    {
+      "path": "/serpent/input-structure",
+      "title": "Input File Structure"
+    },
+    {
+      "path": "/serpent/materials",
+      "title": "Materials & Compositions"
+    },
+    {
+      "path": "/serpent/cross-sections",
+      "title": "Cross Sections & Nuclear Data"
+    },
+    {
+      "path": "/serpent/sources",
+      "title": "Source Definition"
+    },
+    {
+      "path": "/serpent/simple-geometries",
+      "title": "Simple Geometries"
+    },
+    {
+      "path": "/serpent/surface-types",
+      "title": "Surface Types & Operations"
+    },
+    {
+      "path": "/serpent/cell-definitions",
+      "title": "Cell Definitions"
+    },
+    {
+      "path": "/serpent/lattice-structures",
+      "title": "Lattice Structures"
+    },
+    {
+      "path": "/serpent/universe-concept",
+      "title": "Universe Concept"
+    },
+    {
+      "path": "/serpent/physics-settings",
+      "title": "Physics Settings"
+    },
+    {
+      "path": "/serpent/burnup",
+      "title": "Burnup Calculations"
+    },
+    {
+      "path": "/serpent/running-simulations",
+      "title": "Running Simulations"
+    },
+    {
+      "path": "/serpent/basic-output-analysis",
+      "title": "Basic Output Analysis"
+    },
+    {
+      "path": "/serpent/visualization-tools",
+      "title": "Visualization Tools"
+    },
+    {
+      "path": "/serpent/example-pin",
+      "title": "Tutorial: Pin Cell Model"
+    },
+    {
+      "path": "/serpent/example-assembly",
+      "title": "Tutorial: Fuel Assembly"
+    },
+    {
+      "path": "/serpent/troubleshooting",
+      "title": "Troubleshooting Guide"
+    }
+  ],
+  "scone": [
+    {
+      "path": "/scone/intro",
+      "title": "Introduction"
+    },
+    {
+      "path": "/scone/installation",
+      "title": "Installation"
+    },
+    {
+      "path": "/scone/basics",
+      "title": "Basic Concepts"
+    },
+    {
+      "path": "/scone/geometry",
+      "title": "Geometry"
+    },
+    {
+      "path": "/scone/materials",
+      "title": "Materials"
+    },
+    {
+      "path": "/scone/config",
+      "title": "Configuration"
+    },
+    {
+      "path": "/scone/sources",
+      "title": "Sources"
+    },
+    {
+      "path": "/scone/tallies",
+      "title": "Tallies"
+    },
+    {
+      "path": "/scone/settings",
+      "title": "Settings"
+    },
+    {
+      "path": "/scone/transport",
+      "title": "Transport"
+    },
+    {
+      "path": "/scone/xs-data",
+      "title": "Cross Section Data"
+    },
+    {
+      "path": "/scone/nuclear-data",
+      "title": "Nuclear Data"
+    },
+    {
+      "path": "/scone/variance-reduction",
+      "title": "Variance Reduction"
+    },
+    {
+      "path": "/scone/parallel",
+      "title": "Parallel Computing"
+    },
+    {
+      "path": "/scone/extensions",
+      "title": "Extensions"
+    },
+    {
+      "path": "/scone/examples",
+      "title": "Examples Overview"
+    },
+    {
+      "path": "/scone/simple-examples",
+      "title": "Simple Examples"
+    },
+    {
+      "path": "/scone/reactor-examples",
+      "title": "Reactor Examples"
+    },
+    {
+      "path": "/scone/beavrs",
+      "title": "BEAVRS Benchmark"
+    },
+    {
+      "path": "/scone/shielding-examples",
+      "title": "Shielding Examples"
+    },
+    {
+      "path": "/scone/advanced",
+      "title": "Advanced Topics"
+    },
+    {
+      "path": "/scone/troubleshooting",
+      "title": "Troubleshooting"
+    }
+  ],
+  "fundamentals": [
+    {
+      "path": "/fundamentals",
+      "title": "Overview"
+    },
+    {
+      "path": "/fundamentals/comparison",
+      "title": "Code Comparison"
+    },
+    {
+      "path": "/fundamentals/probability",
+      "title": "Probability Theory"
+    },
+    {
+      "path": "/fundamentals/transport",
+      "title": "Transport Theory"
+    },
+    {
+      "path": "/fundamentals/geometry",
+      "title": "Geometry"
+    },
+    {
+      "path": "/fundamentals/tallies",
+      "title": "Tallies & Analysis"
+    },
+    {
+      "path": "/fundamentals/variance-reduction",
+      "title": "Variance Reduction"
+    },
+    {
+      "path": "/fundamentals/advanced",
+      "title": "Advanced Techniques"
+    },
+    {
+      "path": "/fundamentals/rosetta-stone",
+      "title": "Cross-Code Reference"
+    },
+    {
+      "path": "/fundamentals/interactive-rosetta-stone",
+      "title": "Interactive Rosetta Stone"
+    }
+  ]
+}

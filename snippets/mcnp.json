@@ -1,0 +1,270 @@
+{
+  "MCNP Cell Card": {
+    "prefix": "cell",
+    "body": [
+      "${1:id}  ${2:mat}  ${3:-density}  ${4:surfaces}  imp:n=1  $$ ${5:description}"
+    ],
+    "description": "MCNP cell card"
+  },
+  "MCNP Surface cz": {
+    "prefix": "cz",
+    "body": ["${1:id}  cz  ${2:radius}  $$ ${3:description}"],
+    "description": "Z-axis cylinder surface"
+  },
+  "MCNP Material": {
+    "prefix": "mat",
+    "body": [
+      "c  m${1:id}: ${2:Material Name}",
+      "m${1:id}  ${3:zaid}  ${4:fraction}",
+      "     ${5:zaid2}  ${6:fraction2}"
+    ],
+    "description": "Material definition"
+  },
+  "MCNP Kcode": {
+    "prefix": "kcode",
+    "body": [
+      "kcode  ${1:10000} ${2:1.0} ${3:25} ${4:200}",
+      "ksrc   ${5:0 0 0}"
+    ],
+    "description": "Criticality source card"
+  },
+  "MCNP Tally F4": {
+    "prefix": "f4",
+    "body": [
+      "f${1:4}:n  ${2:cells}",
+      "fm${1:4}   (1 ${3:mat} -6)",
+      "fc${1:4}   ${4:Tally description}"
+    ],
+    "description": "Cell flux tally with fission rate"
+  },
+  "MCNP Lattice Fill": {
+    "prefix": "lattice",
+    "body": [
+      "c --- ${1:N}x${1:N} Lattice (u=${2:10}) ---",
+      "${3:100} 0  -10 11 -12 13  lat=1 u=${2:10} imp:n=1 fill=-${4:8}:${4:8} -${4:8}:${4:8} 0:0",
+      "    ${5:fill map rows}"
+    ],
+    "description": "Rectangular lattice fill"
+  },
+  "MCNP UO2 Fuel": {
+    "prefix": "uo2",
+    "body": [
+      "c  m${1:1}: UO2 fuel, ${2:4.5}% enriched",
+      "m${1:1}  92235.80c  ${3:9.993e-04}",
+      "     92238.80c  ${4:2.128e-02}",
+      "      8016.80c  ${5:4.456e-02}"
+    ],
+    "description": "UO2 fuel material (atom densities)"
+  },
+  "MCNP Light Water": {
+    "prefix": "water",
+    "body": [
+      "c  m${1:2}: Light water",
+      "m${1:2}   1001.80c  6.669e-02",
+      "      8016.80c  3.335e-02",
+      "mt${1:2}  lwtr.20t"
+    ],
+    "description": "Light water with thermal scattering"
+  },
+
+  "MCNP PWR Pin Cell": {
+    "prefix": "mcnp-pin-cell",
+    "scope": "mcnp",
+    "body": [
+      "PWR Fuel Pin Cell Model",
+      "c ---- Cell Cards ----",
+      "1  1  -10.4     -1      imp:n=1  $$ UO2 Fuel",
+      "2  2  -0.0001    1 -2   imp:n=1  $$ Helium Gap",
+      "3  3  -6.56      2 -3   imp:n=1  $$ Zircaloy-4 Cladding",
+      "4  4  -0.998     3 -4   imp:n=1  $$ Water Moderator",
+      "",
+      "c ---- Surface Cards ----",
+      "1  cz  0.4095   $$ Fuel radius",
+      "2  cz  0.4178   $$ Gap outer radius",
+      "3  cz  0.4750   $$ Clad outer radius",
+      "*4 cz  0.7108   $$ Reflecting boundary",
+      "",
+      "c ---- Data Cards ----",
+      "m1   92235.70c   0.04     $$ 4% enriched UO2",
+      "     92238.70c   0.96",
+      "     8016.70c    2.0",
+      "m2   2004.70c    1.0      $$ Helium",
+      "m3   40090.70c  -0.5145   $$ Zircaloy-4 (wt)",
+      "     40091.70c  -0.1122",
+      "     40092.70c  -0.1715",
+      "     40094.70c  -0.1738",
+      "     40096.70c  -0.0280",
+      "m4   1001.70c    2.0      $$ Light water",
+      "     8016.70c    1.0",
+      "mt4  lwtr.10t",
+      "",
+      "kcode 5000 1.0 50 250",
+      "ksrc  0 0 0",
+      "",
+      "f4:n  1",
+      "e4    1e-9 1e-8 1e-7 1e-6 1e-5 1e-4 1e-3 1e-2",
+      "      0.1 1 2 3 4 5 6 7 8 9 10"
+    ],
+    "description": "Complete PWR pin-cell input deck"
+  },
+
+  "MCNP PWR 17x17 Assembly": {
+    "prefix": "mcnp-pwr-assembly",
+    "scope": "mcnp",
+    "body": [
+      "c PWR 17x17 Fuel Assembly Model",
+      "c ---- Universe 1: Fuel pin ----",
+      "1    1  -10.4   -1      imp:n=1  u=1   $$ UO2 fuel",
+      "2    2  -0.0001  1 -2   imp:n=1  u=1   $$ Helium gap",
+      "3    3  -6.56    2 -3   imp:n=1  u=1   $$ Zircaloy clad",
+      "4    4  -0.998   3      imp:n=1  u=1   $$ Water",
+      "",
+      "c ---- Universe 2: Guide tube ----",
+      "11   4  -0.998  -5      imp:n=1  u=2",
+      "12   4  -0.998   5      imp:n=1  u=2",
+      "",
+      "c ---- Universe 3: 17x17 assembly lattice ----",
+      "21   0  -21 22 -23 24  lat=1  u=3  imp:n=1",
+      "     fill=-8:8 -8:8 0:0",
+      "     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+      "     1 1 1 1 2 1 1 1 2 1 1 1 2 1 1 1 1",
+      "     1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 2 1",
+      "     1 1 2 1 1 1 1 2 1 2 1 1 1 1 2 1 1",
+      "     1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1",
+      "     1 1 1 1 1 2 1 1 1 1 1 1 1 2 1 1 1",
+      "     1 1 1 1 1 1 1 1 2 1 2 1 1 1 1 1 1",
+      "     1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1",
+      "     1 2 1 1 1 1 2 1 2 1 2 1 1 1 1 2 1",
+      "     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+      "     1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 2 1",
+      "     1 1 1 1 1 2 1 1 1 1 1 1 1 2 1 1 1",
+      "     1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1",
+      "     1 1 2 1 1 1 1 2 1 2 1 1 1 1 2 1 1",
+      "     1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 2 1",
+      "     1 1 1 1 2 1 1 1 2 1 1 1 2 1 1 1 1",
+      "     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+      "",
+      "31   0          -31 32 -33 34          fill=3  imp:n=1",
+      "32   4  -0.998  (31:-32:33:-34)",
+      "                -35 36 -37 38          imp:n=1",
+      "33   0           35:-36:37:-38         imp:n=0",
+      "",
+      "c ---- Surface Cards ----",
+      "1    cz  0.4095",
+      "2    cz  0.4178",
+      "3    cz  0.4750",
+      "5    cz  0.6020",
+      "21   px   0.630",
+      "22   px  -0.630",
+      "23   py   0.630",
+      "24   py  -0.630",
+      "31   px   10.71",
+      "32   px  -10.71",
+      "33   py   10.71",
+      "34   py  -10.71",
+      "35   px   11.50",
+      "36   px  -11.50",
+      "37   py   11.50",
+      "38   py  -11.50",
+      "",
+      "m1   92235.70c   0.04",
+      "     92238.70c   0.96",
+      "     8016.70c    2.0",
+      "m2   2004.70c    1.0",
+      "m3   40090.70c  -0.5145",
+      "     40091.70c  -0.1122",
+      "     40092.70c  -0.1715",
+      "     40094.70c  -0.1738",
+      "     40096.70c  -0.0280",
+      "m4   1001.70c    2.0",
+      "     8016.70c    1.0",
+      "mt4  lwtr.10t",
+      "",
+      "kcode 10000 1.0 50 250",
+      "ksrc  0 0 0   2 2 0  -2 -2 0   2 -2 0  -2 2 0"
+    ],
+    "description": "Complete PWR 17x17 assembly deck with full lattice fill map"
+  },
+
+  "MCNP 3x3 Criticality Array": {
+    "prefix": "mcnp-criticality-array",
+    "scope": "mcnp",
+    "body": [
+      "3x3 Fuel Pin Array Criticality Problem",
+      "c Universe 1: fuel pin",
+      "10  1  -10.4  -1        u=1  imp:n=1  $$ UO2 fuel",
+      "11  0          1 -2     u=1  imp:n=1  $$ Gap (void)",
+      "12  2  -6.56   2 -3    u=1  imp:n=1   $$ Zircaloy clad",
+      "13  3  -0.998  3        u=1  imp:n=1  $$ Water",
+      "",
+      "c Universe 2: 3x3 array",
+      "20  0  20 -21 -22 23  lat=1  u=2  imp:n=1",
+      "     fill=-1:1 -1:1 0:0",
+      "     1 1 1",
+      "     1 1 1",
+      "     1 1 1",
+      "",
+      "30   0          30 -31 -32 33  fill=2  imp:n=1",
+      "31   0          -30:31:32:-33          imp:n=0",
+      "",
+      "1   cz  0.4095",
+      "2   cz  0.4178",
+      "3   cz  0.4750",
+      "20  px  -0.630",
+      "21  px   0.630",
+      "22  py   0.630",
+      "23  py  -0.630",
+      "*30 px  -1.89",
+      "*31 px   1.89",
+      "*32 py   1.89",
+      "*33 py  -1.89",
+      "",
+      "m1   92235.70c  0.05",
+      "     92238.70c  0.95",
+      "     8016.70c   2.0",
+      "m2   40090.70c -0.55",
+      "     40091.70c -0.11",
+      "     40092.70c -0.17",
+      "     40094.70c -0.15",
+      "     40096.70c -0.02",
+      "m3   1001.70c   2.0",
+      "     8016.70c   1.0",
+      "mt3  lwtr.10t",
+      "",
+      "kcode  5000 1.0 50 300",
+      "ksrc   0 0 0   0.6 0 0  -0.6 0 0   0 0.6 0   0 -0.6 0"
+    ],
+    "description": "3x3 fuel-pin array criticality problem with reflecting boundary"
+  },
+
+  "MCNP Shielding Slab": {
+    "prefix": "mcnp-shielding-slab",
+    "scope": "mcnp",
+    "body": [
+      "Point-source shielding slab",
+      "c ---- Cell Cards ----",
+      "1   1  -7.86   -1 2 -3   imp:n=1  $$ Steel slab",
+      "2   0          -2         imp:n=1  $$ Source region (air)",
+      "3   0           1:-2:3    imp:n=0  $$ Outside",
+      "",
+      "c ---- Surface Cards ----",
+      "1   px  ${1:30.0}        $$ Slab outer face",
+      "2   px  0.0",
+      "3   px  -10.0",
+      "",
+      "c ---- Data Cards ----",
+      "m1   26054.70c  -0.0585",
+      "     26056.70c  -0.9176",
+      "     26057.70c  -0.0212",
+      "     26058.70c  -0.0028",
+      "",
+      "sdef pos=-5 0 0 erg=${2:1.0} par=n",
+      "",
+      "f2:n  1                  $$ Surface current downstream",
+      "e2    1e-9 1e-7 1e-5 1e-3 0.1 1 10",
+      "",
+      "nps  ${3:1e6}"
+    ],
+    "description": "Point-source neutron transmission through a steel slab"
+  }
+}

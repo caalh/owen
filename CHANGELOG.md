@@ -1,0 +1,57 @@
+# Changelog
+
+All notable changes to the OWEN VS Code extension are documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] — 2026-05-26
+
+Initial public release of OWEN — Open Workflow for Engineered Neutronics,
+the BelvoirDynamics VS Code/Cursor extension for nuclear reactor input files.
+
+### Added
+
+- **Languages & syntax highlighting** for MCNP (`.i`, `.mcnp`, `.inp`), Serpent (`.serp`),
+  and SCONE (`.scone`). OpenMC is detected via Python files that `import openmc`.
+- **Deep validators** with diagnostic codes:
+  - MCNP — ZAID format, density/material sign conventions, `mt`/S(α,β) hydrogen check,
+    macrobody parameter counts, `HEX`/`CYL` keyword detection, `imp:n` missing on cells.
+  - OpenMC — `Source` → `IndependentSource`, `rectangular_prism` → `RectangularPrism`,
+    `Material(temperature=)` flagged, deprecated `openmc_exec_kwargs`,
+    `model.run()` return-value misuse.
+  - Serpent — `surf rect` → `cuboid`, `trcl` not allowed, `set omp` (use CLI),
+    `set egrid` energy-unit heuristic.
+  - SCONE — `aceNuclearDatabase` → `aceNeutronDatabase`, `temp` ↔ ZAID temperature
+    suffix matching, `pinUniverse` radii/fills length + outer-0.0 check,
+    non-ASCII detection, dictionary semicolon rule.
+- **Lattice Builder** (unchanged from preview): visual grid → MCNP/OpenMC/Serpent code.
+- **NRDP material insertion** — bundled snapshot in VSIX plus optional live override
+  via `owen.nrdp.live` / `owen.nrdp.endpoint`. Language-aware (`mcnp` / `serpent` /
+  `openmc` codes; SCONE stub generated from composition).
+- **Tutorial deep-links** to https://reactormc.net via `OWEN: Open Tutorial`.
+- **Parameter sweep** workflow (`OWEN: Run Parameter Sweep`) driven by JSON
+  schema, with per-run input mutation, output capture, k-eff parsing
+  (MCNP combined keff, OpenMC `Combined k-effective`), manifest + TSV summary.
+- **3D geometry preview** webview (Three.js via importmap) — MCNP `cz`
+  cylinders rendered as transparent stacked tubes. Other languages: graceful
+  empty-state.
+- **Community Library** (feature-flagged via `owen.community.enabled`) —
+  Supabase-backed approved-model browser with insert-at-cursor or open-as-untitled.
+- **Snippets** — significant expansion: full PWR pin cell, 17×17 PWR assembly,
+  3×3 criticality array, shielding slab (MCNP); full OpenMC pin and assembly
+  Python scripts; SCONE fuel pin, 5×5 assembly, shielding slab tutorials.
+- **CI** — GitHub Actions workflow building the VSIX as a release artifact.
+
+### Changed
+
+- Rebranded from DynamicMC to BelvoirDynamics; publisher is now `belvoirdynamics`.
+- Repository URL corrected to `https://github.com/caalh/BelvoirDynamics`.
+- Removed dead `onLanguage:openmc` activation event; OpenMC routes through the
+  shared `detectMonteCarloLanguage` helper.
+
+### Known limitations
+
+- 3D geometry preview is MCNP-only and limited to `cz` cylinders.
+- SCONE runner shows guidance for WSL on Windows; no automatic WSL detection yet.
+- Community Library has no in-app submission flow (UI is browse + insert only).

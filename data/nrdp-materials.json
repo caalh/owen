@@ -1,0 +1,1421 @@
+[
+  {
+    "slug": "uo2-3pct",
+    "name": "UO2 (3% enriched)",
+    "formula": "UO₂",
+    "category": "fuels",
+    "density": 10.97,
+    "description": "Uranium dioxide at 3 wt% U-235 enrichment. Standard fuel for commercial PWRs and BWRs.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.01
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.323333
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c UO2 (3 wt% U-235 enriched)\nc Density: 10.97 g/cm3 (use -10.97 on cell card)\nm1    92235.80c  0.010000  $ U-235\n      92238.80c  0.323333  $ U-238\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% UO2 (3 wt% U-235 enriched)\nmat UO2_3pct -10.97\n92235.80c  0.010000  % U-235\n92238.80c  0.323333  % U-238\n 8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nuo2_3pct = openmc.Material(name='UO2 3% enriched')\nuo2_3pct.set_density('g/cm3', 10.97)\nuo2_3pct.add_nuclide('U235', 0.010000)\nuo2_3pct.add_nuclide('U238', 0.323333)\nuo2_3pct.add_nuclide('O16', 0.666667)",
+    "notes": "Theoretical density is 10.97 g/cm³; operating pellets are typically 94–96% TD (~10.31–10.53 g/cm³). Adjust density for porosity as needed."
+  },
+  {
+    "slug": "uo2-4.5pct",
+    "name": "UO2 (4.5% enriched)",
+    "formula": "UO₂",
+    "category": "fuels",
+    "density": 10.97,
+    "description": "Uranium dioxide at 4.5 wt% U-235 enrichment. Common in high-burnup PWR fuel assemblies.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.015
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.318333
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c UO2 (4.5 wt% U-235 enriched)\nc Density: 10.97 g/cm3 (use -10.97 on cell card)\nm2    92235.80c  0.015000  $ U-235\n      92238.80c  0.318333  $ U-238\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% UO2 (4.5 wt% U-235 enriched)\nmat UO2_4p5pct -10.97\n92235.80c  0.015000  % U-235\n92238.80c  0.318333  % U-238\n 8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nuo2_4p5pct = openmc.Material(name='UO2 4.5% enriched')\nuo2_4p5pct.set_density('g/cm3', 10.97)\nuo2_4p5pct.add_nuclide('U235', 0.015000)\nuo2_4p5pct.add_nuclide('U238', 0.318333)\nuo2_4p5pct.add_nuclide('O16', 0.666667)",
+    "notes": "Theoretical density. Adjust for pellet porosity (typically 94–96% TD)."
+  },
+  {
+    "slug": "uo2-5pct",
+    "name": "UO2 (5% enriched)",
+    "formula": "UO₂",
+    "category": "fuels",
+    "density": 10.97,
+    "description": "Uranium dioxide at 5 wt% U-235 enrichment. Maximum enrichment for standard commercial fuel under current NRC licensing.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.016667
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.316666
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c UO2 (5 wt% U-235 enriched)\nc Density: 10.97 g/cm3 (use -10.97 on cell card)\nm3    92235.80c  0.016667  $ U-235\n      92238.80c  0.316666  $ U-238\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% UO2 (5 wt% U-235 enriched)\nmat UO2_5pct -10.97\n92235.80c  0.016667  % U-235\n92238.80c  0.316666  % U-238\n 8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nuo2_5pct = openmc.Material(name='UO2 5% enriched')\nuo2_5pct.set_density('g/cm3', 10.97)\nuo2_5pct.add_nuclide('U235', 0.016667)\nuo2_5pct.add_nuclide('U238', 0.316666)\nuo2_5pct.add_nuclide('O16', 0.666667)",
+    "notes": "Theoretical density. Adjust for pellet porosity (typically 94–96% TD)."
+  },
+  {
+    "slug": "uo2-haleu",
+    "name": "UO2 (19.75% HALEU)",
+    "formula": "UO₂",
+    "category": "fuels",
+    "density": 10.97,
+    "description": "Uranium dioxide at 19.75 wt% U-235, High-Assay Low-Enriched Uranium. Used in advanced reactor designs and research reactors.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.065833
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.2675
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c UO2 (19.75 wt% HALEU)\nc Density: 10.97 g/cm3 (use -10.97 on cell card)\nm4    92235.80c  0.065833  $ U-235\n      92238.80c  0.267500  $ U-238\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% UO2 (19.75 wt% HALEU)\nmat UO2_HALEU -10.97\n92235.80c  0.065833  % U-235\n92238.80c  0.267500  % U-238\n 8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nuo2_haleu = openmc.Material(name='UO2 19.75% HALEU')\nuo2_haleu.set_density('g/cm3', 10.97)\nuo2_haleu.add_nuclide('U235', 0.065833)\nuo2_haleu.add_nuclide('U238', 0.267500)\nuo2_haleu.add_nuclide('O16', 0.666667)",
+    "notes": "19.75% is the maximum enrichment classified as LEU (<20%). Used in microreactors, TRISO fuels, and research reactors."
+  },
+  {
+    "slug": "mox-5pct",
+    "name": "MOX (5% Pu)",
+    "formula": "(U,Pu)O₂",
+    "category": "fuels",
+    "density": 10.97,
+    "description": "Mixed oxide fuel with 5 at% Pu in heavy metal. Depleted U matrix (0.25% U-235) with reactor-grade Pu vector.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.000792
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.315875
+      },
+      {
+        "zaid": "94238",
+        "name": "Pu-238",
+        "fraction": 0.000333
+      },
+      {
+        "zaid": "94239",
+        "name": "Pu-239",
+        "fraction": 0.009
+      },
+      {
+        "zaid": "94240",
+        "name": "Pu-240",
+        "fraction": 0.004
+      },
+      {
+        "zaid": "94241",
+        "name": "Pu-241",
+        "fraction": 0.002
+      },
+      {
+        "zaid": "94242",
+        "name": "Pu-242",
+        "fraction": 0.001333
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c MOX fuel (5 at% Pu in HM, reactor-grade Pu)\nc Depleted U (0.25% U-235), Pu vector: 2/54/24/12/8\nc Density: 10.97 g/cm3 (use -10.97 on cell card)\nm5    92235.80c  0.000792  $ U-235\n      92238.80c  0.315875  $ U-238\n      94238.80c  0.000333  $ Pu-238\n      94239.80c  0.009000  $ Pu-239\n      94240.80c  0.004000  $ Pu-240\n      94241.80c  0.002000  $ Pu-241\n      94242.80c  0.001333  $ Pu-242\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% MOX fuel (5 at% Pu in HM, reactor-grade Pu)\n% Depleted U (0.25% U-235), Pu vector: 2/54/24/12/8\nmat MOX_5pct -10.97\n92235.80c  0.000792  % U-235\n92238.80c  0.315875  % U-238\n94238.80c  0.000333  % Pu-238\n94239.80c  0.009000  % Pu-239\n94240.80c  0.004000  % Pu-240\n94241.80c  0.002000  % Pu-241\n94242.80c  0.001333  % Pu-242\n 8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nmox_5pct = openmc.Material(name='MOX 5% Pu')\nmox_5pct.set_density('g/cm3', 10.97)\nmox_5pct.add_nuclide('U235', 0.000792)\nmox_5pct.add_nuclide('U238', 0.315875)\nmox_5pct.add_nuclide('Pu238', 0.000333)\nmox_5pct.add_nuclide('Pu239', 0.009000)\nmox_5pct.add_nuclide('Pu240', 0.004000)\nmox_5pct.add_nuclide('Pu241', 0.002000)\nmox_5pct.add_nuclide('Pu242', 0.001333)\nmox_5pct.add_nuclide('O16', 0.666667)",
+    "notes": "Pu vector is representative of reactor-grade Pu (Pu-238/239/240/241/242 = 2/54/24/12/8 at%). Adjust Pu vector and U enrichment to match specific fuel specifications."
+  },
+  {
+    "slug": "un",
+    "name": "Uranium Nitride",
+    "formula": "UN",
+    "category": "fuels",
+    "density": 14.32,
+    "description": "Uranium mononitride fuel at 5% U-235 enrichment. High uranium density and thermal conductivity make it attractive for advanced reactors.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.025
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.475
+      },
+      {
+        "zaid": "7014",
+        "name": "N-14",
+        "fraction": 0.5
+      }
+    ],
+    "mcnpCode": "c Uranium Nitride (5 wt% U-235)\nc Density: 14.32 g/cm3 (use -14.32 on cell card)\nm6    92235.80c  0.025000  $ U-235\n      92238.80c  0.475000  $ U-238\n       7014.80c  0.500000  $ N-14",
+    "serpentCode": "% Uranium Nitride (5 wt% U-235)\nmat UN_fuel -14.32\n92235.80c  0.025000  % U-235\n92238.80c  0.475000  % U-238\n 7014.80c  0.500000  % N-14",
+    "openmcCode": "import openmc\n\nun_fuel = openmc.Material(name='Uranium Nitride')\nun_fuel.set_density('g/cm3', 14.32)\nun_fuel.add_nuclide('U235', 0.025000)\nun_fuel.add_nuclide('U238', 0.475000)\nun_fuel.add_nuclide('N14', 0.500000)",
+    "notes": "N-15 enrichment is sometimes used to reduce parasitic (n,p) reactions on N-14. Replace N-14 with N-15 (7015.80c) if modeling N-15-enriched UN."
+  },
+  {
+    "slug": "uc",
+    "name": "Uranium Carbide",
+    "formula": "UC",
+    "category": "fuels",
+    "density": 13.63,
+    "description": "Uranium monocarbide fuel at 5% U-235 enrichment. High heavy-metal density and good thermal properties for fast reactor and space reactor applications.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.025
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.475
+      },
+      {
+        "zaid": "6012",
+        "name": "C-12",
+        "fraction": 0.5
+      }
+    ],
+    "mcnpCode": "c Uranium Carbide (5 wt% U-235)\nc Density: 13.63 g/cm3 (use -13.63 on cell card)\nm7    92235.80c  0.025000  $ U-235\n      92238.80c  0.475000  $ U-238\n       6000.80c  0.500000  $ C (natural)",
+    "serpentCode": "% Uranium Carbide (5 wt% U-235)\nmat UC_fuel -13.63\n92235.80c  0.025000  % U-235\n92238.80c  0.475000  % U-238\n 6000.80c  0.500000  % C (natural)",
+    "openmcCode": "import openmc\n\nuc_fuel = openmc.Material(name='Uranium Carbide')\nuc_fuel.set_density('g/cm3', 13.63)\nuc_fuel.add_nuclide('U235', 0.025000)\nuc_fuel.add_nuclide('U238', 0.475000)\nuc_fuel.add_element('C', 0.500000)"
+  },
+  {
+    "slug": "uzrh",
+    "name": "UZrH₁.₆ (TRIGA fuel)",
+    "formula": "UZrH₁.₆",
+    "category": "fuels",
+    "density": 6,
+    "description": "Uranium-zirconium hydride fuel used in TRIGA research reactors. 20% enriched U with Zr-H matrix providing inherent negative temperature feedback.",
+    "composition": [
+      {
+        "zaid": "92235",
+        "name": "U-235",
+        "fraction": 0.055556
+      },
+      {
+        "zaid": "92238",
+        "name": "U-238",
+        "fraction": 0.222222
+      },
+      {
+        "zaid": "Zr",
+        "name": "Zirconium (natural)",
+        "fraction": 0.277778,
+        "isElement": true
+      },
+      {
+        "zaid": "1001",
+        "name": "H-1",
+        "fraction": 0.444444
+      }
+    ],
+    "sab": [
+      "h-zr",
+      "zr-h"
+    ],
+    "mcnpCode": "c UZrH1.6 TRIGA fuel (20% enriched U)\nc Density: 6.0 g/cm3 (use -6.0 on cell card)\nc Atoms per formula: 1 U + 1 Zr + 1.6 H = 3.6\nm8    92235.80c  0.055556  $ U-235\n      92238.80c  0.222222  $ U-238\n      40000.80c  0.277778  $ Zr (natural)\n       1001.80c  0.444444  $ H-1\nmt8   h-zr.20t zr-h.20t",
+    "serpentCode": "% UZrH1.6 TRIGA fuel (20% enriched U)\nmat UZrH_TRIGA -6.0 moder hzr 1001 moder zrh 40000\n92235.80c  0.055556  % U-235\n92238.80c  0.222222  % U-238\n40000.80c  0.277778  % Zr (natural)\n 1001.80c  0.444444  % H-1\ntherm hzr h-zr.20t\ntherm zrh zr-h.20t",
+    "openmcCode": "import openmc\n\nuzrh = openmc.Material(name='UZrH1.6 TRIGA fuel')\nuzrh.set_density('g/cm3', 6.0)\nuzrh.add_nuclide('U235', 0.055556)\nuzrh.add_nuclide('U238', 0.222222)\nuzrh.add_element('Zr', 0.277778)\nuzrh.add_nuclide('H1', 0.444444)\nuzrh.add_s_alpha_beta('c_H_in_ZrH')\nuzrh.add_s_alpha_beta('c_Zr_in_ZrH')",
+    "notes": "U content is typically 8.5–12 wt% of the total fuel meat. Density and H/Zr ratio vary by fuel element type. The ZrH matrix provides a large prompt negative temperature coefficient."
+  },
+  {
+    "slug": "zirc2",
+    "name": "Zircaloy-2",
+    "category": "cladding-structural",
+    "density": 6.56,
+    "description": "Zirconium alloy cladding used primarily in BWRs. Low neutron absorption cross section with good corrosion resistance.",
+    "composition": [
+      {
+        "zaid": "Zr",
+        "name": "Zirconium",
+        "fraction": 0.9823,
+        "isElement": true
+      },
+      {
+        "zaid": "Sn",
+        "name": "Tin",
+        "fraction": 0.015,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.0012,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.001,
+        "isElement": true
+      },
+      {
+        "zaid": "Ni",
+        "name": "Nickel",
+        "fraction": 0.0005,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Zircaloy-2\nc Density: 6.56 g/cm3 (use -6.56 on cell card)\nc Weight fractions (nominal composition)\nm9    40000.80c -0.9823  $ Zr (balance)\n      50000.80c -0.0150  $ Sn\n      26000.80c -0.0012  $ Fe\n      24000.80c -0.0010  $ Cr\n      28000.80c -0.0005  $ Ni",
+    "serpentCode": "% Zircaloy-2 (weight fractions)\nmat Zircaloy2 -6.56\n40000.80c -0.9823  % Zr (balance)\n50000.80c -0.0150  % Sn\n26000.80c -0.0012  % Fe\n24000.80c -0.0010  % Cr\n28000.80c -0.0005  % Ni",
+    "openmcCode": "import openmc\n\nzirc2 = openmc.Material(name='Zircaloy-2')\nzirc2.set_density('g/cm3', 6.56)\nzirc2.add_element('Zr', 0.9823, percent_type='wo')\nzirc2.add_element('Sn', 0.0150, percent_type='wo')\nzirc2.add_element('Fe', 0.0012, percent_type='wo')\nzirc2.add_element('Cr', 0.0010, percent_type='wo')\nzirc2.add_element('Ni', 0.0005, percent_type='wo')",
+    "notes": "Nominal midrange composition. Zircaloy-2 contains Ni (unlike Zircaloy-4), making it less suited for PWR water chemistry but standard for BWR fuel cladding."
+  },
+  {
+    "slug": "zirc4",
+    "name": "Zircaloy-4",
+    "category": "cladding-structural",
+    "density": 6.56,
+    "description": "Zirconium alloy cladding used primarily in PWRs. No nickel content, which improves hydrogen pickup resistance in PWR coolant chemistry.",
+    "composition": [
+      {
+        "zaid": "Zr",
+        "name": "Zirconium",
+        "fraction": 0.9819,
+        "isElement": true
+      },
+      {
+        "zaid": "Sn",
+        "name": "Tin",
+        "fraction": 0.015,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.0021,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.001,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Zircaloy-4\nc Density: 6.56 g/cm3 (use -6.56 on cell card)\nc Weight fractions (nominal composition)\nm10   40000.80c -0.9819  $ Zr (balance)\n      50000.80c -0.0150  $ Sn\n      26000.80c -0.0021  $ Fe\n      24000.80c -0.0010  $ Cr",
+    "serpentCode": "% Zircaloy-4 (weight fractions)\nmat Zircaloy4 -6.56\n40000.80c -0.9819  % Zr (balance)\n50000.80c -0.0150  % Sn\n26000.80c -0.0021  % Fe\n24000.80c -0.0010  % Cr",
+    "openmcCode": "import openmc\n\nzirc4 = openmc.Material(name='Zircaloy-4')\nzirc4.set_density('g/cm3', 6.56)\nzirc4.add_element('Zr', 0.9819, percent_type='wo')\nzirc4.add_element('Sn', 0.0150, percent_type='wo')\nzirc4.add_element('Fe', 0.0021, percent_type='wo')\nzirc4.add_element('Cr', 0.0010, percent_type='wo')",
+    "notes": "Nominal midrange composition. Standard PWR fuel cladding and structural material. No Ni content distinguishes it from Zircaloy-2."
+  },
+  {
+    "slug": "ss304",
+    "name": "Stainless Steel 304",
+    "category": "cladding-structural",
+    "density": 7.94,
+    "description": "Austenitic stainless steel widely used for reactor structural components, piping, and vessel internals.",
+    "composition": [
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.6917,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.19,
+        "isElement": true
+      },
+      {
+        "zaid": "Ni",
+        "name": "Nickel",
+        "fraction": 0.0925,
+        "isElement": true
+      },
+      {
+        "zaid": "Mn",
+        "name": "Manganese",
+        "fraction": 0.02,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.005,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.0008,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Stainless Steel 304\nc Density: 7.94 g/cm3 (use -7.94 on cell card)\nc Weight fractions (nominal composition)\nm11   26000.80c -0.6917  $ Fe (balance)\n      24000.80c -0.1900  $ Cr\n      28000.80c -0.0925  $ Ni\n      25055.80c -0.0200  $ Mn\n      14000.80c -0.0050  $ Si\n       6000.80c -0.0008  $ C",
+    "serpentCode": "% Stainless Steel 304 (weight fractions)\nmat SS304 -7.94\n26000.80c -0.6917  % Fe (balance)\n24000.80c -0.1900  % Cr\n28000.80c -0.0925  % Ni\n25055.80c -0.0200  % Mn\n14000.80c -0.0050  % Si\n 6000.80c -0.0008  % C",
+    "openmcCode": "import openmc\n\nss304 = openmc.Material(name='SS304')\nss304.set_density('g/cm3', 7.94)\nss304.add_element('Fe', 0.6917, percent_type='wo')\nss304.add_element('Cr', 0.1900, percent_type='wo')\nss304.add_element('Ni', 0.0925, percent_type='wo')\nss304.add_element('Mn', 0.0200, percent_type='wo')\nss304.add_element('Si', 0.0050, percent_type='wo')\nss304.add_element('C', 0.0008, percent_type='wo')"
+  },
+  {
+    "slug": "ss316",
+    "name": "Stainless Steel 316",
+    "category": "cladding-structural",
+    "density": 7.99,
+    "description": "Molybdenum-bearing austenitic stainless steel with improved corrosion resistance. Used in fast reactor cladding, PWR internals, and hot-leg piping.",
+    "composition": [
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.6567,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.17,
+        "isElement": true
+      },
+      {
+        "zaid": "Ni",
+        "name": "Nickel",
+        "fraction": 0.12,
+        "isElement": true
+      },
+      {
+        "zaid": "Mo",
+        "name": "Molybdenum",
+        "fraction": 0.025,
+        "isElement": true
+      },
+      {
+        "zaid": "Mn",
+        "name": "Manganese",
+        "fraction": 0.02,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.0075,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.0008,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Stainless Steel 316\nc Density: 7.99 g/cm3 (use -7.99 on cell card)\nc Weight fractions (nominal composition)\nm12   26000.80c -0.6567  $ Fe (balance)\n      24000.80c -0.1700  $ Cr\n      28000.80c -0.1200  $ Ni\n      42000.80c -0.0250  $ Mo\n      25055.80c -0.0200  $ Mn\n      14000.80c -0.0075  $ Si\n       6000.80c -0.0008  $ C",
+    "serpentCode": "% Stainless Steel 316 (weight fractions)\nmat SS316 -7.99\n26000.80c -0.6567  % Fe (balance)\n24000.80c -0.1700  % Cr\n28000.80c -0.1200  % Ni\n42000.80c -0.0250  % Mo\n25055.80c -0.0200  % Mn\n14000.80c -0.0075  % Si\n 6000.80c -0.0008  % C",
+    "openmcCode": "import openmc\n\nss316 = openmc.Material(name='SS316')\nss316.set_density('g/cm3', 7.99)\nss316.add_element('Fe', 0.6567, percent_type='wo')\nss316.add_element('Cr', 0.1700, percent_type='wo')\nss316.add_element('Ni', 0.1200, percent_type='wo')\nss316.add_element('Mo', 0.0250, percent_type='wo')\nss316.add_element('Mn', 0.0200, percent_type='wo')\nss316.add_element('Si', 0.0075, percent_type='wo')\nss316.add_element('C', 0.0008, percent_type='wo')"
+  },
+  {
+    "slug": "inconel-718",
+    "name": "Inconel 718",
+    "category": "cladding-structural",
+    "density": 8.19,
+    "description": "Nickel-chromium superalloy used in reactor vessel head penetrations, springs, and high-temperature structural components.",
+    "composition": [
+      {
+        "zaid": "Ni",
+        "name": "Nickel",
+        "fraction": 0.525,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.19,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.1852,
+        "isElement": true
+      },
+      {
+        "zaid": "Nb",
+        "name": "Niobium",
+        "fraction": 0.05,
+        "isElement": true
+      },
+      {
+        "zaid": "Mo",
+        "name": "Molybdenum",
+        "fraction": 0.03,
+        "isElement": true
+      },
+      {
+        "zaid": "Ti",
+        "name": "Titanium",
+        "fraction": 0.009,
+        "isElement": true
+      },
+      {
+        "zaid": "Al",
+        "name": "Aluminum",
+        "fraction": 0.005,
+        "isElement": true
+      },
+      {
+        "zaid": "Mn",
+        "name": "Manganese",
+        "fraction": 0.0035,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.0018,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.0005,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Inconel 718\nc Density: 8.19 g/cm3 (use -8.19 on cell card)\nc Weight fractions (nominal composition)\nm13   28000.80c -0.5250  $ Ni\n      24000.80c -0.1900  $ Cr\n      26000.80c -0.1852  $ Fe (balance)\n      41093.80c -0.0500  $ Nb\n      42000.80c -0.0300  $ Mo\n      22000.80c -0.0090  $ Ti\n      13027.80c -0.0050  $ Al\n      25055.80c -0.0035  $ Mn\n      14000.80c -0.0018  $ Si\n       6000.80c -0.0005  $ C",
+    "serpentCode": "% Inconel 718 (weight fractions)\nmat Inconel718 -8.19\n28000.80c -0.5250  % Ni\n24000.80c -0.1900  % Cr\n26000.80c -0.1852  % Fe (balance)\n41093.80c -0.0500  % Nb\n42000.80c -0.0300  % Mo\n22000.80c -0.0090  % Ti\n13027.80c -0.0050  % Al\n25055.80c -0.0035  % Mn\n14000.80c -0.0018  % Si\n 6000.80c -0.0005  % C",
+    "openmcCode": "import openmc\n\ninconel718 = openmc.Material(name='Inconel 718')\ninconel718.set_density('g/cm3', 8.19)\ninconel718.add_element('Ni', 0.5250, percent_type='wo')\ninconel718.add_element('Cr', 0.1900, percent_type='wo')\ninconel718.add_element('Fe', 0.1852, percent_type='wo')\ninconel718.add_element('Nb', 0.0500, percent_type='wo')\ninconel718.add_element('Mo', 0.0300, percent_type='wo')\ninconel718.add_element('Ti', 0.0090, percent_type='wo')\ninconel718.add_element('Al', 0.0050, percent_type='wo')\ninconel718.add_element('Mn', 0.0035, percent_type='wo')\ninconel718.add_element('Si', 0.0018, percent_type='wo')\ninconel718.add_element('C', 0.0005, percent_type='wo')"
+  },
+  {
+    "slug": "hastelloy-n",
+    "name": "Hastelloy-N",
+    "category": "cladding-structural",
+    "density": 8.86,
+    "description": "Nickel-molybdenum alloy developed for molten salt compatibility. Primary structural material for the MSRE and proposed MSR designs.",
+    "composition": [
+      {
+        "zaid": "Ni",
+        "name": "Nickel",
+        "fraction": 0.71,
+        "isElement": true
+      },
+      {
+        "zaid": "Mo",
+        "name": "Molybdenum",
+        "fraction": 0.16,
+        "isElement": true
+      },
+      {
+        "zaid": "Cr",
+        "name": "Chromium",
+        "fraction": 0.07,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.05,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.005,
+        "isElement": true
+      },
+      {
+        "zaid": "Mn",
+        "name": "Manganese",
+        "fraction": 0.005,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Hastelloy-N (INOR-8)\nc Density: 8.86 g/cm3 (use -8.86 on cell card)\nc Weight fractions (nominal composition)\nm14   28000.80c -0.7100  $ Ni (balance)\n      42000.80c -0.1600  $ Mo\n      24000.80c -0.0700  $ Cr\n      26000.80c -0.0500  $ Fe\n      14000.80c -0.0050  $ Si\n      25055.80c -0.0050  $ Mn",
+    "serpentCode": "% Hastelloy-N (weight fractions)\nmat HastelloyN -8.86\n28000.80c -0.7100  % Ni (balance)\n42000.80c -0.1600  % Mo\n24000.80c -0.0700  % Cr\n26000.80c -0.0500  % Fe\n14000.80c -0.0050  % Si\n25055.80c -0.0050  % Mn",
+    "openmcCode": "import openmc\n\nhastelloy_n = openmc.Material(name='Hastelloy-N')\nhastelloy_n.set_density('g/cm3', 8.86)\nhastelloy_n.add_element('Ni', 0.7100, percent_type='wo')\nhastelloy_n.add_element('Mo', 0.1600, percent_type='wo')\nhastelloy_n.add_element('Cr', 0.0700, percent_type='wo')\nhastelloy_n.add_element('Fe', 0.0500, percent_type='wo')\nhastelloy_n.add_element('Si', 0.0050, percent_type='wo')\nhastelloy_n.add_element('Mn', 0.0050, percent_type='wo')",
+    "notes": "Also known as INOR-8 or Alloy N. Developed at ORNL for molten fluoride salt service. Modified Hastelloy-N with Ti additions improves irradiation resistance."
+  },
+  {
+    "slug": "carbon-steel",
+    "name": "Carbon Steel",
+    "category": "cladding-structural",
+    "density": 7.82,
+    "description": "Plain carbon steel used for reactor pressure vessel construction (with SS cladding), structural supports, and containment liner.",
+    "composition": [
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.99,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.005,
+        "isElement": true
+      },
+      {
+        "zaid": "Mn",
+        "name": "Manganese",
+        "fraction": 0.005,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Carbon Steel (mild)\nc Density: 7.82 g/cm3 (use -7.82 on cell card)\nc Weight fractions\nm15   26000.80c -0.9900  $ Fe (balance)\n       6000.80c -0.0050  $ C\n      25055.80c -0.0050  $ Mn",
+    "serpentCode": "% Carbon Steel (weight fractions)\nmat CarbonSteel -7.82\n26000.80c -0.9900  % Fe (balance)\n 6000.80c -0.0050  % C\n25055.80c -0.0050  % Mn",
+    "openmcCode": "import openmc\n\ncarbon_steel = openmc.Material(name='Carbon Steel')\ncarbon_steel.set_density('g/cm3', 7.82)\ncarbon_steel.add_element('Fe', 0.9900, percent_type='wo')\ncarbon_steel.add_element('C', 0.0050, percent_type='wo')\ncarbon_steel.add_element('Mn', 0.0050, percent_type='wo')",
+    "notes": "Simplified composition for ASTM A516 Grade 70. RPV steels (e.g., SA-508) have more complex compositions with Ni, Mo, and Cr additions."
+  },
+  {
+    "slug": "light-water",
+    "name": "Light Water",
+    "formula": "H₂O",
+    "category": "moderators-coolants",
+    "density": 0.998,
+    "description": "Light water at room temperature (~20°C). Primary moderator and coolant in PWRs and BWRs.",
+    "composition": [
+      {
+        "zaid": "1001",
+        "name": "H-1",
+        "fraction": 0.666667
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.333333
+      }
+    ],
+    "sab": [
+      "lwtr"
+    ],
+    "mcnpCode": "c Light Water (H2O)\nc Density: 0.998 g/cm3 (use -0.998 on cell card)\nm16    1001.80c  0.666667  $ H-1\n       8016.80c  0.333333  $ O-16\nmt16  lwtr.20t",
+    "serpentCode": "% Light Water (H2O)\nmat light_water -0.998 moder lwtr 1001\n1001.80c  0.666667  % H-1\n8016.80c  0.333333  % O-16\ntherm lwtr lwtr.20t",
+    "openmcCode": "import openmc\n\nlight_water = openmc.Material(name='Light Water')\nlight_water.set_density('g/cm3', 0.998)\nlight_water.add_nuclide('H1', 0.666667)\nlight_water.add_nuclide('O16', 0.333333)\nlight_water.add_s_alpha_beta('c_H_in_H2O')",
+    "notes": "Density at 20°C and 1 atm. Adjust density for operating temperature: ~0.72 g/cm³ at 300°C (PWR hot leg), ~0.74 g/cm³ at 286°C (BWR)."
+  },
+  {
+    "slug": "heavy-water",
+    "name": "Heavy Water",
+    "formula": "D₂O",
+    "category": "moderators-coolants",
+    "density": 1.105,
+    "description": "Deuterium oxide at room temperature. Moderator and coolant in CANDU and other heavy-water reactors, providing superior neutron economy.",
+    "composition": [
+      {
+        "zaid": "1002",
+        "name": "H-2 (D)",
+        "fraction": 0.666667
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.333333
+      }
+    ],
+    "sab": [
+      "hwtr"
+    ],
+    "mcnpCode": "c Heavy Water (D2O)\nc Density: 1.105 g/cm3 (use -1.105 on cell card)\nm17    1002.80c  0.666667  $ H-2 (deuterium)\n       8016.80c  0.333333  $ O-16\nmt17  hwtr.20t",
+    "serpentCode": "% Heavy Water (D2O)\nmat heavy_water -1.105 moder hwtr 1002\n1002.80c  0.666667  % H-2 (deuterium)\n8016.80c  0.333333  % O-16\ntherm hwtr hwtr.20t",
+    "openmcCode": "import openmc\n\nheavy_water = openmc.Material(name='Heavy Water')\nheavy_water.set_density('g/cm3', 1.105)\nheavy_water.add_nuclide('H2', 0.666667)\nheavy_water.add_nuclide('O16', 0.333333)\nheavy_water.add_s_alpha_beta('c_D_in_D2O')",
+    "notes": "Density at 20°C. Real heavy water typically has 99.75–99.80 at% D; trace H-1 can be added if modeling isotopic purity."
+  },
+  {
+    "slug": "graphite",
+    "name": "Graphite",
+    "formula": "C",
+    "category": "moderators-coolants",
+    "density": 1.7,
+    "description": "Nuclear-grade graphite moderator. Used in gas-cooled reactors (AGR, HTGR), RBMK, and molten salt reactors.",
+    "composition": [
+      {
+        "zaid": "C",
+        "name": "Carbon (natural)",
+        "fraction": 1,
+        "isElement": true
+      }
+    ],
+    "sab": [
+      "grph"
+    ],
+    "mcnpCode": "c Nuclear Graphite\nc Density: 1.70 g/cm3 (use -1.70 on cell card)\nm18    6000.80c  1.000000  $ C (natural)\nmt18  grph.20t",
+    "serpentCode": "% Nuclear Graphite\nmat graphite -1.70 moder grph 6000\n6000.80c  1.000000  % C (natural)\ntherm grph grph.20t",
+    "openmcCode": "import openmc\n\ngraphite = openmc.Material(name='Graphite')\ngraphite.set_density('g/cm3', 1.70)\ngraphite.add_element('C', 1.0)\ngraphite.add_s_alpha_beta('c_Graphite')",
+    "notes": "Density varies 1.6–1.8 g/cm³ depending on grade and irradiation history. Nuclear-grade graphite is purified to <5 ppm boron-equivalent impurities."
+  },
+  {
+    "slug": "beryllium",
+    "name": "Beryllium",
+    "formula": "Be",
+    "category": "moderators-coolants",
+    "density": 1.85,
+    "description": "Beryllium metal used as a neutron reflector and moderator in research and test reactors. Excellent neutron economy due to (n,2n) reactions.",
+    "composition": [
+      {
+        "zaid": "4009",
+        "name": "Be-9",
+        "fraction": 1
+      }
+    ],
+    "sab": [
+      "be-met"
+    ],
+    "mcnpCode": "c Beryllium Metal\nc Density: 1.85 g/cm3 (use -1.85 on cell card)\nm19    4009.80c  1.000000  $ Be-9\nmt19  be-met.20t",
+    "serpentCode": "% Beryllium Metal\nmat beryllium -1.85 moder be_met 4009\n4009.80c  1.000000  % Be-9\ntherm be_met be-met.20t",
+    "openmcCode": "import openmc\n\nberyllium = openmc.Material(name='Beryllium')\nberyllium.set_density('g/cm3', 1.85)\nberyllium.add_nuclide('Be9', 1.0)\nberyllium.add_s_alpha_beta('c_Be')",
+    "notes": "Be is toxic; handling requires special safety precautions. The (n,2n) reaction on Be-9 makes it an effective neutron multiplier."
+  },
+  {
+    "slug": "beo",
+    "name": "Beryllium Oxide",
+    "formula": "BeO",
+    "category": "moderators-coolants",
+    "density": 3.01,
+    "description": "Beryllium oxide (beryllia) used as a moderator and reflector in compact reactors. Higher density than graphite with excellent thermal conductivity.",
+    "composition": [
+      {
+        "zaid": "4009",
+        "name": "Be-9",
+        "fraction": 0.5
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.5
+      }
+    ],
+    "sab": [
+      "be-o",
+      "o-be"
+    ],
+    "mcnpCode": "c Beryllium Oxide (BeO)\nc Density: 3.01 g/cm3 (use -3.01 on cell card)\nm20    4009.80c  0.500000  $ Be-9\n       8016.80c  0.500000  $ O-16\nmt20  be-o.20t o-be.20t",
+    "serpentCode": "% Beryllium Oxide (BeO)\nmat BeO -3.01 moder beo_be 4009 moder beo_o 8016\n4009.80c  0.500000  % Be-9\n8016.80c  0.500000  % O-16\ntherm beo_be be-o.20t\ntherm beo_o o-be.20t",
+    "openmcCode": "import openmc\n\nbeo = openmc.Material(name='Beryllium Oxide')\nbeo.set_density('g/cm3', 3.01)\nbeo.add_nuclide('Be9', 0.500000)\nbeo.add_nuclide('O16', 0.500000)\nbeo.add_s_alpha_beta('c_Be_in_BeO')\nbeo.add_s_alpha_beta('c_O_in_BeO')"
+  },
+  {
+    "slug": "flibe",
+    "name": "FLiBe",
+    "formula": "Li₂BeF₄",
+    "category": "moderators-coolants",
+    "density": 1.94,
+    "description": "Lithium fluoride–beryllium fluoride molten salt (2LiF-BeF₂). Primary coolant/fuel carrier for fluoride-salt-cooled and molten salt reactors. Li-7 enriched to 99.995% to minimize tritium production.",
+    "composition": [
+      {
+        "zaid": "3006",
+        "name": "Li-6",
+        "fraction": 0.000014
+      },
+      {
+        "zaid": "3007",
+        "name": "Li-7",
+        "fraction": 0.2857
+      },
+      {
+        "zaid": "4009",
+        "name": "Be-9",
+        "fraction": 0.142857
+      },
+      {
+        "zaid": "9019",
+        "name": "F-19",
+        "fraction": 0.571429
+      }
+    ],
+    "mcnpCode": "c FLiBe (Li2BeF4) - Li-7 enriched to 99.995%\nc Density: 1.94 g/cm3 (use -1.94 on cell card)\nc Atom fractions for 2 Li + 1 Be + 4 F = 7 atoms\nm21    3006.80c  0.000014  $ Li-6\n       3007.80c  0.285700  $ Li-7\n       4009.80c  0.142857  $ Be-9\n       9019.80c  0.571429  $ F-19",
+    "serpentCode": "% FLiBe (Li2BeF4) - Li-7 enriched to 99.995%\nmat FLiBe -1.94\n3006.80c  0.000014  % Li-6\n3007.80c  0.285700  % Li-7\n4009.80c  0.142857  % Be-9\n9019.80c  0.571429  % F-19",
+    "openmcCode": "import openmc\n\nflibe = openmc.Material(name='FLiBe')\nflibe.set_density('g/cm3', 1.94)\nflibe.add_nuclide('Li6', 0.000014)\nflibe.add_nuclide('Li7', 0.285700)\nflibe.add_nuclide('Be9', 0.142857)\nflibe.add_nuclide('F19', 0.571429)",
+    "notes": "Li-7 enrichment to 99.995% is critical for MSR designs to limit tritium production from Li-6(n,α)T. Density varies with temperature: roughly ρ = 2.413 − 4.88×10⁻⁴·T(K) g/cm³."
+  },
+  {
+    "slug": "flinak",
+    "name": "FLiNaK",
+    "formula": "LiF-NaF-KF",
+    "category": "moderators-coolants",
+    "density": 2.09,
+    "description": "Lithium fluoride–sodium fluoride–potassium fluoride eutectic salt (46.5-11.5-42.0 mol%). Used as a secondary coolant and heat-transfer fluid in MSR designs.",
+    "composition": [
+      {
+        "zaid": "Li",
+        "name": "Lithium (natural)",
+        "fraction": 0.2325,
+        "isElement": true
+      },
+      {
+        "zaid": "Na",
+        "name": "Sodium",
+        "fraction": 0.0575,
+        "isElement": true
+      },
+      {
+        "zaid": "K",
+        "name": "Potassium (natural)",
+        "fraction": 0.21,
+        "isElement": true
+      },
+      {
+        "zaid": "F",
+        "name": "Fluorine",
+        "fraction": 0.5,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c FLiNaK (46.5LiF-11.5NaF-42.0KF mol%)\nc Density: 2.09 g/cm3 (use -2.09 on cell card)\nc Natural Li (7.59% Li-6, 92.41% Li-7)\nm22    3006.80c  0.017647  $ Li-6\n       3007.80c  0.214853  $ Li-7\n      11023.80c  0.057500  $ Na-23\n      19000.80c  0.210000  $ K (natural)\n       9019.80c  0.500000  $ F-19",
+    "serpentCode": "% FLiNaK (46.5LiF-11.5NaF-42.0KF mol%)\n% Natural lithium\nmat FLiNaK -2.09\n 3006.80c  0.017647  % Li-6\n 3007.80c  0.214853  % Li-7\n11023.80c  0.057500  % Na-23\n19000.80c  0.210000  % K (natural)\n 9019.80c  0.500000  % F-19",
+    "openmcCode": "import openmc\n\nflinak = openmc.Material(name='FLiNaK')\nflinak.set_density('g/cm3', 2.09)\nflinak.add_nuclide('Li6', 0.017647)\nflinak.add_nuclide('Li7', 0.214853)\nflinak.add_nuclide('Na23', 0.057500)\nflinak.add_element('K', 0.210000)\nflinak.add_nuclide('F19', 0.500000)",
+    "notes": "Eutectic melting point ~454°C. Unlike FLiBe, FLiNaK typically uses natural Li since it serves as a secondary (non-fuel-bearing) coolant where tritium production is less critical."
+  },
+  {
+    "slug": "sodium",
+    "name": "Sodium",
+    "formula": "Na",
+    "category": "moderators-coolants",
+    "density": 0.968,
+    "description": "Liquid sodium coolant at ~100°C. Primary coolant in sodium-cooled fast reactors (SFRs) such as EBR-II, BN-600/800, and proposed designs like Natrium.",
+    "composition": [
+      {
+        "zaid": "11023",
+        "name": "Na-23",
+        "fraction": 1
+      }
+    ],
+    "mcnpCode": "c Sodium (liquid, ~100°C)\nc Density: 0.968 g/cm3 (use -0.968 on cell card)\nm23   11023.80c  1.000000  $ Na-23",
+    "serpentCode": "% Sodium (liquid)\nmat sodium -0.968\n11023.80c  1.000000  % Na-23",
+    "openmcCode": "import openmc\n\nsodium = openmc.Material(name='Sodium')\nsodium.set_density('g/cm3', 0.968)\nsodium.add_element('Na', 1.0)",
+    "notes": "Density at ~100°C. At typical SFR operating temperature (~500°C), density is ~0.856 g/cm³. Na-23 is monoisotopic."
+  },
+  {
+    "slug": "lead",
+    "name": "Lead",
+    "formula": "Pb",
+    "category": "moderators-coolants",
+    "density": 11.35,
+    "description": "Natural lead coolant. Used in lead-cooled fast reactors (LFRs) for its high boiling point, good neutron economy, and shielding properties.",
+    "composition": [
+      {
+        "zaid": "Pb",
+        "name": "Lead (natural)",
+        "fraction": 1,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Lead (natural)\nc Density: 11.35 g/cm3 (use -11.35 on cell card)\nm24   82000.80c  1.000000  $ Pb (natural)",
+    "serpentCode": "% Lead (natural)\nmat lead -11.35\n82000.80c  1.000000  % Pb (natural)",
+    "openmcCode": "import openmc\n\nlead = openmc.Material(name='Lead')\nlead.set_density('g/cm3', 11.35)\nlead.add_element('Pb', 1.0)",
+    "notes": "Density at room temperature. At LFR operating temperature (~480°C), density is ~10.52 g/cm³. Natural Pb: 1.4% Pb-204, 24.1% Pb-206, 22.1% Pb-207, 52.4% Pb-208."
+  },
+  {
+    "slug": "lbe",
+    "name": "Lead-Bismuth Eutectic",
+    "formula": "Pb-Bi",
+    "category": "moderators-coolants",
+    "density": 10.17,
+    "description": "Lead-bismuth eutectic (44.5% Pb, 55.5% Bi by weight). Low melting point (~125°C) liquid metal coolant for fast reactors and spallation targets.",
+    "composition": [
+      {
+        "zaid": "Pb",
+        "name": "Lead",
+        "fraction": 0.445,
+        "isElement": true
+      },
+      {
+        "zaid": "83209",
+        "name": "Bi-209",
+        "fraction": 0.555
+      }
+    ],
+    "mcnpCode": "c Lead-Bismuth Eutectic (LBE)\nc Density: 10.17 g/cm3 (use -10.17 on cell card)\nc Weight fractions\nm25   82000.80c -0.4450  $ Pb (natural)\n      83209.80c -0.5550  $ Bi-209",
+    "serpentCode": "% Lead-Bismuth Eutectic (LBE, weight fractions)\nmat LBE -10.17\n82000.80c -0.4450  % Pb (natural)\n83209.80c -0.5550  % Bi-209",
+    "openmcCode": "import openmc\n\nlbe = openmc.Material(name='Lead-Bismuth Eutectic')\nlbe.set_density('g/cm3', 10.17)\nlbe.add_element('Pb', 0.4450, percent_type='wo')\nlbe.add_element('Bi', 0.5550, percent_type='wo')",
+    "notes": "Eutectic melting point ~125°C. Activation product Po-210 (from Bi-209 neutron capture) is a radiological concern."
+  },
+  {
+    "slug": "co2",
+    "name": "Carbon Dioxide",
+    "formula": "CO₂",
+    "category": "moderators-coolants",
+    "density": 0.00184,
+    "description": "Carbon dioxide gas at STP. Coolant in gas-cooled reactors (Magnox, AGR) and supercritical CO₂ Brayton cycle power conversion.",
+    "composition": [
+      {
+        "zaid": "C",
+        "name": "Carbon (natural)",
+        "fraction": 0.333333,
+        "isElement": true
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.666667
+      }
+    ],
+    "mcnpCode": "c Carbon Dioxide (CO2) at STP\nc Density: 0.00184 g/cm3 (use -0.00184 on cell card)\nm26    6000.80c  0.333333  $ C (natural)\n       8016.80c  0.666667  $ O-16",
+    "serpentCode": "% Carbon Dioxide (CO2) at STP\nmat CO2_gas -0.00184\n6000.80c  0.333333  % C (natural)\n8016.80c  0.666667  % O-16",
+    "openmcCode": "import openmc\n\nco2 = openmc.Material(name='Carbon Dioxide')\nco2.set_density('g/cm3', 0.00184)\nco2.add_element('C', 0.333333)\nco2.add_nuclide('O16', 0.666667)",
+    "notes": "Density at STP (~20°C, 1 atm). In AGRs, CO₂ operates at ~4 MPa and ~650°C. For supercritical CO₂ cycles, density is much higher (~200–500 kg/m³)."
+  },
+  {
+    "slug": "helium",
+    "name": "Helium",
+    "formula": "He",
+    "category": "moderators-coolants",
+    "density": 0.000164,
+    "description": "Helium gas at STP. Coolant in high-temperature gas-cooled reactors (HTGR, VHTR) and fuel-cladding gap fill gas.",
+    "composition": [
+      {
+        "zaid": "2004",
+        "name": "He-4",
+        "fraction": 1
+      }
+    ],
+    "mcnpCode": "c Helium Gas (STP)\nc Density: 0.000164 g/cm3 (use -0.000164 on cell card)\nm27    2004.80c  1.000000  $ He-4",
+    "serpentCode": "% Helium Gas (STP)\nmat helium -0.000164\n2004.80c  1.000000  % He-4",
+    "openmcCode": "import openmc\n\nhelium = openmc.Material(name='Helium')\nhelium.set_density('g/cm3', 0.000164)\nhelium.add_nuclide('He4', 1.0)",
+    "notes": "Density at STP. HTGR helium coolant operates at ~7 MPa, where density is ~3.8 kg/m³. Also used as fill gas in fuel-cladding gaps."
+  },
+  {
+    "slug": "concrete",
+    "name": "Ordinary Concrete (Portland)",
+    "category": "shielding",
+    "density": 2.3,
+    "description": "Standard Portland cement concrete. Primary biological shielding material in reactor facilities. Composition from PNNL-15870.",
+    "composition": [
+      {
+        "zaid": "H",
+        "name": "Hydrogen",
+        "fraction": 0.01,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.001,
+        "isElement": true
+      },
+      {
+        "zaid": "O",
+        "name": "Oxygen",
+        "fraction": 0.52911,
+        "isElement": true
+      },
+      {
+        "zaid": "Na",
+        "name": "Sodium",
+        "fraction": 0.016,
+        "isElement": true
+      },
+      {
+        "zaid": "Mg",
+        "name": "Magnesium",
+        "fraction": 0.002,
+        "isElement": true
+      },
+      {
+        "zaid": "Al",
+        "name": "Aluminum",
+        "fraction": 0.03389,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.337,
+        "isElement": true
+      },
+      {
+        "zaid": "K",
+        "name": "Potassium",
+        "fraction": 0.013,
+        "isElement": true
+      },
+      {
+        "zaid": "Ca",
+        "name": "Calcium",
+        "fraction": 0.044,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.014,
+        "isElement": true
+      }
+    ],
+    "sab": [
+      "lwtr"
+    ],
+    "mcnpCode": "c Ordinary Concrete (Portland), PNNL-15870\nc Density: 2.30 g/cm3 (use -2.30 on cell card)\nc Weight fractions\nm28    1001.80c -0.01000  $ H\n       6000.80c -0.00100  $ C\n       8016.80c -0.52911  $ O\n      11023.80c -0.01600  $ Na\n      12000.80c -0.00200  $ Mg\n      13027.80c -0.03389  $ Al\n      14000.80c -0.33700  $ Si\n      19000.80c -0.01300  $ K\n      20000.80c -0.04400  $ Ca\n      26000.80c -0.01400  $ Fe\nmt28  lwtr.20t",
+    "serpentCode": "% Ordinary Concrete (Portland), PNNL-15870\n% Weight fractions\nmat concrete -2.30 moder lwtr 1001\n 1001.80c -0.01000  % H\n 6000.80c -0.00100  % C\n 8016.80c -0.52911  % O\n11023.80c -0.01600  % Na\n12000.80c -0.00200  % Mg\n13027.80c -0.03389  % Al\n14000.80c -0.33700  % Si\n19000.80c -0.01300  % K\n20000.80c -0.04400  % Ca\n26000.80c -0.01400  % Fe\ntherm lwtr lwtr.20t",
+    "openmcCode": "import openmc\n\nconcrete = openmc.Material(name='Ordinary Concrete')\nconcrete.set_density('g/cm3', 2.30)\nconcrete.add_element('H', 0.01000, percent_type='wo')\nconcrete.add_element('C', 0.00100, percent_type='wo')\nconcrete.add_element('O', 0.52911, percent_type='wo')\nconcrete.add_element('Na', 0.01600, percent_type='wo')\nconcrete.add_element('Mg', 0.00200, percent_type='wo')\nconcrete.add_element('Al', 0.03389, percent_type='wo')\nconcrete.add_element('Si', 0.33700, percent_type='wo')\nconcrete.add_element('K', 0.01300, percent_type='wo')\nconcrete.add_element('Ca', 0.04400, percent_type='wo')\nconcrete.add_element('Fe', 0.01400, percent_type='wo')\nconcrete.add_s_alpha_beta('c_H_in_H2O')",
+    "notes": "Composition from PNNL-15870 Compendium. Hydrogen content is critical for neutron shielding effectiveness. Composition varies by mix design."
+  },
+  {
+    "slug": "baryte-concrete",
+    "name": "Baryte Concrete",
+    "category": "shielding",
+    "density": 3.35,
+    "description": "High-density concrete using baryte (BaSO₄) aggregate. Enhanced gamma-ray shielding compared to ordinary concrete due to high-Z barium content.",
+    "composition": [
+      {
+        "zaid": "H",
+        "name": "Hydrogen",
+        "fraction": 0.0035,
+        "isElement": true
+      },
+      {
+        "zaid": "O",
+        "name": "Oxygen",
+        "fraction": 0.3119,
+        "isElement": true
+      },
+      {
+        "zaid": "Mg",
+        "name": "Magnesium",
+        "fraction": 0.0012,
+        "isElement": true
+      },
+      {
+        "zaid": "Al",
+        "name": "Aluminum",
+        "fraction": 0.0044,
+        "isElement": true
+      },
+      {
+        "zaid": "Si",
+        "name": "Silicon",
+        "fraction": 0.0105,
+        "isElement": true
+      },
+      {
+        "zaid": "S",
+        "name": "Sulfur",
+        "fraction": 0.1078,
+        "isElement": true
+      },
+      {
+        "zaid": "Ca",
+        "name": "Calcium",
+        "fraction": 0.0506,
+        "isElement": true
+      },
+      {
+        "zaid": "Fe",
+        "name": "Iron",
+        "fraction": 0.0471,
+        "isElement": true
+      },
+      {
+        "zaid": "Ba",
+        "name": "Barium",
+        "fraction": 0.463,
+        "isElement": true
+      }
+    ],
+    "sab": [
+      "lwtr"
+    ],
+    "mcnpCode": "c Baryte Concrete (BaSO4 aggregate)\nc Density: 3.35 g/cm3 (use -3.35 on cell card)\nc Weight fractions\nm29    1001.80c -0.00350  $ H\n       8016.80c -0.31190  $ O\n      12000.80c -0.00120  $ Mg\n      13027.80c -0.00440  $ Al\n      14000.80c -0.01050  $ Si\n      16000.80c -0.10780  $ S\n      20000.80c -0.05060  $ Ca\n      26000.80c -0.04710  $ Fe\n      56000.80c -0.46300  $ Ba\nmt29  lwtr.20t",
+    "serpentCode": "% Baryte Concrete (weight fractions)\nmat baryte_concrete -3.35 moder lwtr 1001\n 1001.80c -0.00350  % H\n 8016.80c -0.31190  % O\n12000.80c -0.00120  % Mg\n13027.80c -0.00440  % Al\n14000.80c -0.01050  % Si\n16000.80c -0.10780  % S\n20000.80c -0.05060  % Ca\n26000.80c -0.04710  % Fe\n56000.80c -0.46300  % Ba\ntherm lwtr lwtr.20t",
+    "openmcCode": "import openmc\n\nbaryte_concrete = openmc.Material(name='Baryte Concrete')\nbaryte_concrete.set_density('g/cm3', 3.35)\nbaryte_concrete.add_element('H', 0.00350, percent_type='wo')\nbaryte_concrete.add_element('O', 0.31190, percent_type='wo')\nbaryte_concrete.add_element('Mg', 0.00120, percent_type='wo')\nbaryte_concrete.add_element('Al', 0.00440, percent_type='wo')\nbaryte_concrete.add_element('Si', 0.01050, percent_type='wo')\nbaryte_concrete.add_element('S', 0.10780, percent_type='wo')\nbaryte_concrete.add_element('Ca', 0.05060, percent_type='wo')\nbaryte_concrete.add_element('Fe', 0.04710, percent_type='wo')\nbaryte_concrete.add_element('Ba', 0.46300, percent_type='wo')\nbaryte_concrete.add_s_alpha_beta('c_H_in_H2O')",
+    "notes": "Higher density than ordinary concrete provides better gamma shielding. Lower hydrogen content reduces neutron shielding effectiveness compared to ordinary concrete."
+  },
+  {
+    "slug": "borated-poly",
+    "name": "Borated Polyethylene (5% B)",
+    "formula": "(CH₂)ₙ + 5% B",
+    "category": "shielding",
+    "density": 0.95,
+    "description": "Polyethylene loaded with 5 wt% natural boron. Combined neutron moderation (H) and thermal neutron capture (B-10) for effective neutron shielding.",
+    "composition": [
+      {
+        "zaid": "5010",
+        "name": "B-10",
+        "fraction": 0.00995,
+        "isElement": false
+      },
+      {
+        "zaid": "5011",
+        "name": "B-11",
+        "fraction": 0.04005,
+        "isElement": false
+      },
+      {
+        "zaid": "H",
+        "name": "Hydrogen",
+        "fraction": 0.136542,
+        "isElement": true
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon",
+        "fraction": 0.813458,
+        "isElement": true
+      }
+    ],
+    "sab": [
+      "poly"
+    ],
+    "mcnpCode": "c Borated Polyethylene (5 wt% natural B)\nc Density: 0.95 g/cm3 (use -0.95 on cell card)\nc Weight fractions\nm30    5010.80c -0.009950  $ B-10\n       5011.80c -0.040050  $ B-11\n       1001.80c -0.136542  $ H\n       6000.80c -0.813458  $ C\nmt30  poly.20t",
+    "serpentCode": "% Borated Polyethylene (5 wt% natural B)\n% Weight fractions\nmat borated_poly -0.95 moder poly 1001\n5010.80c -0.009950  % B-10\n5011.80c -0.040050  % B-11\n1001.80c -0.136542  % H\n6000.80c -0.813458  % C\ntherm poly poly.20t",
+    "openmcCode": "import openmc\n\nborated_poly = openmc.Material(name='Borated Polyethylene 5%')\nborated_poly.set_density('g/cm3', 0.95)\nborated_poly.add_nuclide('B10', 0.009950, percent_type='wo')\nborated_poly.add_nuclide('B11', 0.040050, percent_type='wo')\nborated_poly.add_element('H', 0.136542, percent_type='wo')\nborated_poly.add_element('C', 0.813458, percent_type='wo')\nborated_poly.add_s_alpha_beta('c_H_in_CH2')",
+    "notes": "Natural boron is 19.9% B-10, 80.1% B-11. B-10 content can be increased by using enriched boron for enhanced thermal neutron capture."
+  },
+  {
+    "slug": "polyethylene",
+    "name": "Polyethylene",
+    "formula": "(CH₂)ₙ",
+    "category": "shielding",
+    "density": 0.93,
+    "description": "High-density polyethylene (HDPE). Effective neutron moderator and shield due to high hydrogen content.",
+    "composition": [
+      {
+        "zaid": "1001",
+        "name": "H-1",
+        "fraction": 0.666667
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon (natural)",
+        "fraction": 0.333333,
+        "isElement": true
+      }
+    ],
+    "sab": [
+      "poly"
+    ],
+    "mcnpCode": "c Polyethylene (CH2)\nc Density: 0.93 g/cm3 (use -0.93 on cell card)\nm31    1001.80c  0.666667  $ H-1\n       6000.80c  0.333333  $ C (natural)\nmt31  poly.20t",
+    "serpentCode": "% Polyethylene (CH2)\nmat polyethylene -0.93 moder poly 1001\n1001.80c  0.666667  % H-1\n6000.80c  0.333333  % C (natural)\ntherm poly poly.20t",
+    "openmcCode": "import openmc\n\npolyethylene = openmc.Material(name='Polyethylene')\npolyethylene.set_density('g/cm3', 0.93)\npolyethylene.add_nuclide('H1', 0.666667)\npolyethylene.add_element('C', 0.333333)\npolyethylene.add_s_alpha_beta('c_H_in_CH2')"
+  },
+  {
+    "slug": "b4c-natural",
+    "name": "B₄C (natural boron)",
+    "formula": "B₄C",
+    "category": "absorbers",
+    "density": 2.52,
+    "description": "Boron carbide with natural boron (19.9% B-10). Control rod and burnable absorber material. B-10 has a large thermal neutron absorption cross section (3840 barns).",
+    "composition": [
+      {
+        "zaid": "5010",
+        "name": "B-10",
+        "fraction": 0.1592
+      },
+      {
+        "zaid": "5011",
+        "name": "B-11",
+        "fraction": 0.6408
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon (natural)",
+        "fraction": 0.2,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c B4C (natural boron: 19.9% B-10)\nc Density: 2.52 g/cm3 (use -2.52 on cell card)\nc B4C = 4 B + 1 C = 5 atoms total\nm32    5010.80c  0.159200  $ B-10\n       5011.80c  0.640800  $ B-11\n       6000.80c  0.200000  $ C (natural)",
+    "serpentCode": "% B4C (natural boron: 19.9% B-10)\nmat B4C_nat -2.52\n5010.80c  0.159200  % B-10\n5011.80c  0.640800  % B-11\n6000.80c  0.200000  % C (natural)",
+    "openmcCode": "import openmc\n\nb4c_nat = openmc.Material(name='B4C natural')\nb4c_nat.set_density('g/cm3', 2.52)\nb4c_nat.add_nuclide('B10', 0.159200)\nb4c_nat.add_nuclide('B11', 0.640800)\nb4c_nat.add_element('C', 0.200000)"
+  },
+  {
+    "slug": "b4c-enriched",
+    "name": "B₄C (90% B-10 enriched)",
+    "formula": "B₄C",
+    "category": "absorbers",
+    "density": 2.52,
+    "description": "Boron carbide enriched to 90% B-10. Used in control rods and shielding where maximum neutron absorption per unit volume is needed.",
+    "composition": [
+      {
+        "zaid": "5010",
+        "name": "B-10",
+        "fraction": 0.72
+      },
+      {
+        "zaid": "5011",
+        "name": "B-11",
+        "fraction": 0.08
+      },
+      {
+        "zaid": "C",
+        "name": "Carbon (natural)",
+        "fraction": 0.2,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c B4C (90% enriched B-10)\nc Density: 2.52 g/cm3 (use -2.52 on cell card)\nm33    5010.80c  0.720000  $ B-10\n       5011.80c  0.080000  $ B-11\n       6000.80c  0.200000  $ C (natural)",
+    "serpentCode": "% B4C (90% enriched B-10)\nmat B4C_enr -2.52\n5010.80c  0.720000  % B-10\n5011.80c  0.080000  % B-11\n6000.80c  0.200000  % C (natural)",
+    "openmcCode": "import openmc\n\nb4c_enr = openmc.Material(name='B4C 90% B-10')\nb4c_enr.set_density('g/cm3', 2.52)\nb4c_enr.add_nuclide('B10', 0.720000)\nb4c_enr.add_nuclide('B11', 0.080000)\nb4c_enr.add_element('C', 0.200000)"
+  },
+  {
+    "slug": "ag-in-cd",
+    "name": "Ag-In-Cd Control Rod",
+    "formula": "Ag-In-Cd",
+    "category": "absorbers",
+    "density": 10.17,
+    "description": "Silver-indium-cadmium alloy (80-15-5 wt%). Standard control rod absorber material in PWRs, providing absorption across a wide energy range.",
+    "composition": [
+      {
+        "zaid": "Ag",
+        "name": "Silver",
+        "fraction": 0.8,
+        "isElement": true
+      },
+      {
+        "zaid": "In",
+        "name": "Indium",
+        "fraction": 0.15,
+        "isElement": true
+      },
+      {
+        "zaid": "Cd",
+        "name": "Cadmium",
+        "fraction": 0.05,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Ag-In-Cd Control Rod (80/15/5 wt%)\nc Density: 10.17 g/cm3 (use -10.17 on cell card)\nc Weight fractions with natural elements\nm34   47000.80c -0.80  $ Ag (natural)\n      49000.80c -0.15  $ In (natural)\n      48000.80c -0.05  $ Cd (natural)",
+    "serpentCode": "% Ag-In-Cd Control Rod (80/15/5 wt%)\nmat AgInCd -10.17\n47000.80c -0.80  % Ag (natural)\n49000.80c -0.15  % In (natural)\n48000.80c -0.05  % Cd (natural)",
+    "openmcCode": "import openmc\n\nag_in_cd = openmc.Material(name='Ag-In-Cd')\nag_in_cd.set_density('g/cm3', 10.17)\nag_in_cd.add_element('Ag', 0.80, percent_type='wo')\nag_in_cd.add_element('In', 0.15, percent_type='wo')\nag_in_cd.add_element('Cd', 0.05, percent_type='wo')",
+    "notes": "Ag absorbs epithermal neutrons, In absorbs at 1.46 eV resonance, Cd has a strong thermal cutoff at 0.5 eV. Combined, they provide effective absorption across a wide energy range."
+  },
+  {
+    "slug": "gd2o3",
+    "name": "Gadolinium Oxide",
+    "formula": "Gd₂O₃",
+    "category": "absorbers",
+    "density": 7.41,
+    "description": "Gadolinium oxide burnable absorber. Gd-155 and Gd-157 have the largest thermal neutron capture cross sections of any stable nuclides (~61,000 and ~254,000 barns).",
+    "composition": [
+      {
+        "zaid": "64152",
+        "name": "Gd-152",
+        "fraction": 0.0008
+      },
+      {
+        "zaid": "64154",
+        "name": "Gd-154",
+        "fraction": 0.00872
+      },
+      {
+        "zaid": "64155",
+        "name": "Gd-155",
+        "fraction": 0.0592
+      },
+      {
+        "zaid": "64156",
+        "name": "Gd-156",
+        "fraction": 0.08188
+      },
+      {
+        "zaid": "64157",
+        "name": "Gd-157",
+        "fraction": 0.0626
+      },
+      {
+        "zaid": "64158",
+        "name": "Gd-158",
+        "fraction": 0.09936
+      },
+      {
+        "zaid": "64160",
+        "name": "Gd-160",
+        "fraction": 0.08744
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.6
+      }
+    ],
+    "mcnpCode": "c Gadolinium Oxide (Gd2O3)\nc Density: 7.41 g/cm3 (use -7.41 on cell card)\nc Gd2O3 = 2 Gd + 3 O = 5 atoms, natural Gd isotopics\nm35   64152.80c  0.000800  $ Gd-152\n      64154.80c  0.008720  $ Gd-154\n      64155.80c  0.059200  $ Gd-155\n      64156.80c  0.081880  $ Gd-156\n      64157.80c  0.062600  $ Gd-157\n      64158.80c  0.099360  $ Gd-158\n      64160.80c  0.087440  $ Gd-160\n       8016.80c  0.600000  $ O-16",
+    "serpentCode": "% Gadolinium Oxide (Gd2O3), natural Gd isotopics\nmat Gd2O3 -7.41\n64152.80c  0.000800  % Gd-152\n64154.80c  0.008720  % Gd-154\n64155.80c  0.059200  % Gd-155\n64156.80c  0.081880  % Gd-156\n64157.80c  0.062600  % Gd-157\n64158.80c  0.099360  % Gd-158\n64160.80c  0.087440  % Gd-160\n 8016.80c  0.600000  % O-16",
+    "openmcCode": "import openmc\n\ngd2o3 = openmc.Material(name='Gd2O3')\ngd2o3.set_density('g/cm3', 7.41)\ngd2o3.add_nuclide('Gd152', 0.000800)\ngd2o3.add_nuclide('Gd154', 0.008720)\ngd2o3.add_nuclide('Gd155', 0.059200)\ngd2o3.add_nuclide('Gd156', 0.081880)\ngd2o3.add_nuclide('Gd157', 0.062600)\ngd2o3.add_nuclide('Gd158', 0.099360)\ngd2o3.add_nuclide('Gd160', 0.087440)\ngd2o3.add_nuclide('O16', 0.600000)",
+    "notes": "Gd-155 (σ_a ≈ 61,000 b) and Gd-157 (σ_a ≈ 254,000 b) are the primary absorbing isotopes. Used as a burnable poison mixed directly into UO2 fuel pellets (typically 2–10 wt% Gd2O3)."
+  },
+  {
+    "slug": "hafnium",
+    "name": "Hafnium",
+    "formula": "Hf",
+    "category": "absorbers",
+    "density": 13.31,
+    "description": "Hafnium metal control rod absorber. All stable Hf isotopes have significant absorption cross sections, providing long control rod lifetime without depletion concerns.",
+    "composition": [
+      {
+        "zaid": "72174",
+        "name": "Hf-174",
+        "fraction": 0.0016
+      },
+      {
+        "zaid": "72176",
+        "name": "Hf-176",
+        "fraction": 0.0526
+      },
+      {
+        "zaid": "72177",
+        "name": "Hf-177",
+        "fraction": 0.186
+      },
+      {
+        "zaid": "72178",
+        "name": "Hf-178",
+        "fraction": 0.2728
+      },
+      {
+        "zaid": "72179",
+        "name": "Hf-179",
+        "fraction": 0.1362
+      },
+      {
+        "zaid": "72180",
+        "name": "Hf-180",
+        "fraction": 0.3508
+      }
+    ],
+    "mcnpCode": "c Hafnium Metal (natural isotopics)\nc Density: 13.31 g/cm3 (use -13.31 on cell card)\nm36   72174.80c  0.001600  $ Hf-174\n      72176.80c  0.052600  $ Hf-176\n      72177.80c  0.186000  $ Hf-177\n      72178.80c  0.272800  $ Hf-178\n      72179.80c  0.136200  $ Hf-179\n      72180.80c  0.350800  $ Hf-180",
+    "serpentCode": "% Hafnium Metal (natural isotopics)\nmat hafnium -13.31\n72174.80c  0.001600  % Hf-174\n72176.80c  0.052600  % Hf-176\n72177.80c  0.186000  % Hf-177\n72178.80c  0.272800  % Hf-178\n72179.80c  0.136200  % Hf-179\n72180.80c  0.350800  % Hf-180",
+    "openmcCode": "import openmc\n\nhafnium = openmc.Material(name='Hafnium')\nhafnium.set_density('g/cm3', 13.31)\nhafnium.add_element('Hf', 1.0)",
+    "notes": "All six stable Hf isotopes have significant absorption cross sections. Successive neutron captures transmute Hf through its isotope chain, maintaining absorber effectiveness over long irradiation periods. Used in naval reactor control rods."
+  },
+  {
+    "slug": "eu2o3",
+    "name": "Europium Oxide",
+    "formula": "Eu₂O₃",
+    "category": "absorbers",
+    "density": 7.42,
+    "description": "Europium oxide used as a burnable poison and control material. Eu-151 has a very large thermal neutron absorption cross section (~9,200 barns).",
+    "composition": [
+      {
+        "zaid": "63151",
+        "name": "Eu-151",
+        "fraction": 0.19124
+      },
+      {
+        "zaid": "63153",
+        "name": "Eu-153",
+        "fraction": 0.20876
+      },
+      {
+        "zaid": "8016",
+        "name": "O-16",
+        "fraction": 0.6
+      }
+    ],
+    "mcnpCode": "c Europium Oxide (Eu2O3)\nc Density: 7.42 g/cm3 (use -7.42 on cell card)\nc Eu2O3 = 2 Eu + 3 O = 5 atoms, natural Eu isotopics\nm37   63151.80c  0.191240  $ Eu-151\n      63153.80c  0.208760  $ Eu-153\n       8016.80c  0.600000  $ O-16",
+    "serpentCode": "% Europium Oxide (Eu2O3), natural Eu isotopics\nmat Eu2O3 -7.42\n63151.80c  0.191240  % Eu-151\n63153.80c  0.208760  % Eu-153\n 8016.80c  0.600000  % O-16",
+    "openmcCode": "import openmc\n\neu2o3 = openmc.Material(name='Eu2O3')\neu2o3.set_density('g/cm3', 7.42)\neu2o3.add_nuclide('Eu151', 0.191240)\neu2o3.add_nuclide('Eu153', 0.208760)\neu2o3.add_nuclide('O16', 0.600000)",
+    "notes": "Eu-151 (σ_a ≈ 9,200 b) is the primary absorbing isotope. Eu-152 (produced by capture on Eu-151) is radioactive and contributes to spent-fuel gamma source terms."
+  },
+  {
+    "slug": "air",
+    "name": "Dry Air",
+    "category": "gases",
+    "density": 0.001205,
+    "description": "Dry air at standard temperature and pressure (20°C, 1 atm). Used for streaming calculations, room modeling, and atmospheric transport.",
+    "composition": [
+      {
+        "zaid": "N",
+        "name": "Nitrogen",
+        "fraction": 0.7553,
+        "isElement": true
+      },
+      {
+        "zaid": "O",
+        "name": "Oxygen",
+        "fraction": 0.2318,
+        "isElement": true
+      },
+      {
+        "zaid": "Ar",
+        "name": "Argon",
+        "fraction": 0.0129,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Dry Air (STP)\nc Density: 0.001205 g/cm3 (use -0.001205 on cell card)\nc Weight fractions\nm38    7014.80c -0.7553  $ N\n       8016.80c -0.2318  $ O\n      18000.80c -0.0129  $ Ar",
+    "serpentCode": "% Dry Air (STP, weight fractions)\nmat air -0.001205\n 7014.80c -0.7553  % N\n 8016.80c -0.2318  % O\n18000.80c -0.0129  % Ar",
+    "openmcCode": "import openmc\n\nair = openmc.Material(name='Dry Air')\nair.set_density('g/cm3', 0.001205)\nair.add_element('N', 0.7553, percent_type='wo')\nair.add_element('O', 0.2318, percent_type='wo')\nair.add_element('Ar', 0.0129, percent_type='wo')",
+    "notes": "Density at 20°C, 1 atm. Ar-41 activation (from Ar-40 neutron capture) is a radiological concern near reactor containment."
+  },
+  {
+    "slug": "argon",
+    "name": "Argon",
+    "formula": "Ar",
+    "category": "gases",
+    "density": 0.001662,
+    "description": "Argon gas at STP. Cover gas in sodium-cooled fast reactors to prevent sodium-air reactions.",
+    "composition": [
+      {
+        "zaid": "Ar",
+        "name": "Argon (natural)",
+        "fraction": 1,
+        "isElement": true
+      }
+    ],
+    "mcnpCode": "c Argon Gas (STP)\nc Density: 0.001662 g/cm3 (use -0.001662 on cell card)\nm39   18000.80c  1.000000  $ Ar (natural)",
+    "serpentCode": "% Argon Gas (STP)\nmat argon -0.001662\n18000.80c  1.000000  % Ar (natural)",
+    "openmcCode": "import openmc\n\nargon = openmc.Material(name='Argon')\nargon.set_density('g/cm3', 0.001662)\nargon.add_element('Ar', 1.0)",
+    "notes": "Natural Ar is 99.6% Ar-40. Ar-41 (t½ = 1.83 h) produced by Ar-40(n,γ) is a significant activation product in reactor cover gas."
+  },
+  {
+    "slug": "nitrogen",
+    "name": "Nitrogen",
+    "formula": "N₂",
+    "category": "gases",
+    "density": 0.001165,
+    "description": "Nitrogen gas at STP. Used for inerting containment and fuel handling areas.",
+    "composition": [
+      {
+        "zaid": "7014",
+        "name": "N-14",
+        "fraction": 1
+      }
+    ],
+    "mcnpCode": "c Nitrogen Gas (STP)\nc Density: 0.001165 g/cm3 (use -0.001165 on cell card)\nm40    7014.80c  1.000000  $ N-14",
+    "serpentCode": "% Nitrogen Gas (STP)\nmat nitrogen -0.001165\n7014.80c  1.000000  % N-14",
+    "openmcCode": "import openmc\n\nnitrogen = openmc.Material(name='Nitrogen')\nnitrogen.set_density('g/cm3', 0.001165)\nnitrogen.add_element('N', 1.0)",
+    "notes": "N-14 is 99.6% of natural nitrogen. The N-14(n,p)C-14 reaction produces long-lived C-14 (t½ = 5,730 y), relevant for waste and environmental dose calculations."
+  },
+  {
+    "slug": "void",
+    "name": "Void / Vacuum",
+    "category": "gases",
+    "density": 0,
+    "description": "Vacuum or void region. No material is present; particles stream freely through these regions.",
+    "composition": [],
+    "mcnpCode": "c Void / Vacuum\nc No material card needed.\nc Use material number 0 on the cell card:\nc   1  0  -1    $ void cell inside surface 1",
+    "serpentCode": "% Void / Vacuum\n% No material definition needed.\n% Use 'void' as the material in cell definitions:\n%   cell c1 0 void -s1",
+    "openmcCode": "import openmc\n\n# Void regions need no material definition.\n# Leave the Cell.fill attribute as None:\n#   cell = openmc.Cell()\n#   cell.region = -sphere\n#   cell.fill = None  # void",
+    "notes": "In MCNP, void cells use material number 0 with no density. In Serpent, use the keyword \"void\". In OpenMC, leave Cell.fill as None."
+  }
+]

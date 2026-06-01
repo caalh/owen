@@ -1,0 +1,282 @@
+{
+  "name": "owen",
+  "displayName": "OWEN — Open Workflow for Engineered Neutronics",
+  "description": "Nuclear reactor modeling toolkit: syntax highlighting, lattice builder, geometry preview, validation, and workflow automation for MCNP, OpenMC, Serpent, and SCONE.",
+  "version": "0.1.0",
+  "publisher": "belvoirdynamics",
+  "license": "SEE LICENSE IN LICENSE",
+  "icon": "assets/owen-icon.png",
+  "homepage": "https://reactormc.net",
+  "bugs": {
+    "url": "https://github.com/caalh/owen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caalh/owen.git"
+  },
+  "qna": "marketplace",
+  "galleryBanner": {
+    "color": "#0b1020",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "mcnp",
+    "openmc",
+    "serpent",
+    "scone",
+    "nuclear",
+    "monte-carlo",
+    "reactor",
+    "neutronics",
+    "lattice"
+  ],
+  "activationEvents": [
+    "onLanguage:mcnp",
+    "onLanguage:serpent",
+    "onLanguage:scone",
+    "onLanguage:python",
+    "onCommand:owen.openLatticeBuilder",
+    "onCommand:owen.validateInput",
+    "onCommand:owen.runSimulation",
+    "onCommand:owen.openGeometryPreview",
+    "onCommand:owen.searchReactorLibrary",
+    "onCommand:owen.insertMaterial",
+    "onCommand:owen.openTutorial",
+    "onCommand:owen.runSweep"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "mcnp",
+        "aliases": [
+          "MCNP",
+          "mcnp"
+        ],
+        "extensions": [
+          ".i",
+          ".mcnp",
+          ".inp"
+        ],
+        "configuration": "./language-configuration/mcnp.language-configuration.json"
+      },
+      {
+        "id": "serpent",
+        "aliases": [
+          "Serpent",
+          "serpent"
+        ],
+        "extensions": [
+          ".serp"
+        ],
+        "configuration": "./language-configuration/serpent.language-configuration.json"
+      },
+      {
+        "id": "scone",
+        "aliases": [
+          "SCONE",
+          "scone"
+        ],
+        "extensions": [
+          ".scone"
+        ],
+        "configuration": "./language-configuration/scone.language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "mcnp",
+        "scopeName": "source.mcnp",
+        "path": "./syntaxes/mcnp.tmLanguage.json"
+      },
+      {
+        "language": "serpent",
+        "scopeName": "source.serpent",
+        "path": "./syntaxes/serpent.tmLanguage.json"
+      },
+      {
+        "language": "scone",
+        "scopeName": "source.scone",
+        "path": "./syntaxes/scone.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "owen.openLatticeBuilder",
+        "title": "OWEN: Open Lattice Builder",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.validateInput",
+        "title": "OWEN: Validate Input File",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.runSimulation",
+        "title": "OWEN: Run Simulation",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.openGeometryPreview",
+        "title": "OWEN: Open 3D Geometry Preview",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.searchReactorLibrary",
+        "title": "OWEN: Search Reactor Library",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.insertMaterial",
+        "title": "OWEN: Insert Material from Database",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.openTutorial",
+        "title": "OWEN: Open Tutorial",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.runSweep",
+        "title": "OWEN: Run Parameter Sweep",
+        "category": "OWEN"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "owen.openLatticeBuilder",
+          "group": "owen@1",
+          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+        },
+        {
+          "command": "owen.validateInput",
+          "group": "owen@2",
+          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+        },
+        {
+          "command": "owen.insertMaterial",
+          "group": "owen@3",
+          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "OWEN",
+      "properties": {
+        "owen.openmc.executable": {
+          "type": "string",
+          "default": "openmc",
+          "description": "Path to the OpenMC executable. Used only for non-Python OpenMC entry points; Python model scripts run via 'owen.openmc.pythonExecutable'."
+        },
+        "owen.openmc.pythonExecutable": {
+          "type": "string",
+          "default": "python",
+          "description": "Python interpreter used to run OpenMC model scripts (e.g. build_model.py)."
+        },
+        "owen.mcnp.executable": {
+          "type": "string",
+          "default": "mcnp6",
+          "description": "Path to the MCNP executable."
+        },
+        "owen.serpent.executable": {
+          "type": "string",
+          "default": "sss2",
+          "description": "Path to the Serpent executable."
+        },
+        "owen.scone.executable": {
+          "type": "string",
+          "default": "scone",
+          "description": "Path to the SCONE executable. On Windows, SCONE typically requires WSL."
+        },
+        "owen.simulation.workingDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Working directory for simulation runs. Defaults to file's directory."
+        },
+        "owen.community.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable the Community Library browser. Requires owen.supabase.url and owen.supabase.anonKey."
+        },
+        "owen.supabase.url": {
+          "type": "string",
+          "default": "",
+          "description": "Supabase project URL backing the Community Library (e.g. https://xxxx.supabase.co)."
+        },
+        "owen.supabase.anonKey": {
+          "type": "string",
+          "default": "",
+          "description": "Supabase anon (public) API key for the Community Library."
+        },
+        "owen.nrdp.live": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fetch NRDP data live from reactormc.net when online; falls back to bundled snapshot."
+        },
+        "owen.nrdp.endpoint": {
+          "type": "string",
+          "default": "https://reactormc.net/data",
+          "description": "Base URL for live NRDP material/element snapshots (expects nrdp-materials.json and nrdp-elements.json)."
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "mcnp",
+        "path": "./snippets/mcnp.json"
+      },
+      {
+        "language": "python",
+        "path": "./snippets/openmc.json"
+      },
+      {
+        "language": "serpent",
+        "path": "./snippets/serpent.json"
+      },
+      {
+        "language": "scone",
+        "path": "./snippets/scone.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "export-nrdp": "node ./scripts/export-nrdp-snapshot.mjs",
+    "export-tutorials": "node ./scripts/export-tutorial-links.mjs"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.56.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.3.0",
+    "pngjs": "^7.0.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

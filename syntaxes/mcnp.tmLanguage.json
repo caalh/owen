@@ -1,0 +1,43 @@
+{
+  "scopeName": "source.mcnp",
+  "name": "MCNP",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#keyword" },
+    { "include": "#material" },
+    { "include": "#tally" },
+    { "include": "#surface" },
+    { "include": "#number" },
+    { "include": "#zaid" }
+  ],
+  "repository": {
+    "comment": {
+      "match": "^[cC]\\s.*$|\\$.*$",
+      "name": "comment.line.mcnp"
+    },
+    "keyword": {
+      "match": "\\b(mode|kcode|ksrc|sdef|nps|prdmp|print|phys|imp|fill|lat|u|trcl|like|but)\\b",
+      "name": "keyword.control.mcnp"
+    },
+    "material": {
+      "match": "^m\\d+|^mt\\d+",
+      "name": "entity.name.function.mcnp"
+    },
+    "tally": {
+      "match": "^f\\d+|^fm\\d+|^fc\\d+|^e\\d+|^de\\d+|^df\\d+",
+      "name": "support.function.mcnp"
+    },
+    "surface": {
+      "match": "\\b(cz|cx|cy|pz|px|py|sz|so|rpp|rcc|sph|sq|gq|tz|kz)\\b",
+      "name": "storage.type.mcnp"
+    },
+    "number": {
+      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.mcnp"
+    },
+    "zaid": {
+      "match": "\\d{4,6}\\.\\d{2}[cCpPdDyY]",
+      "name": "string.other.zaid.mcnp"
+    }
+  }
+}

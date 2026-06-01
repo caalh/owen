@@ -1,0 +1,44 @@
+{
+  "scopeName": "source.serpent",
+  "name": "Serpent",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#keyword" },
+    { "include": "#material" },
+    { "include": "#pin" },
+    { "include": "#number" },
+    { "include": "#string" },
+    { "include": "#zaid" }
+  ],
+  "repository": {
+    "comment": {
+      "match": "%.*$",
+      "name": "comment.line.percent.serpent"
+    },
+    "keyword": {
+      "match": "\\b(set|surf|cell|lat|pin|dep|det|ene|mesh|plot|include|therm|mat)\\b",
+      "name": "keyword.control.serpent"
+    },
+    "material": {
+      "match": "^mat\\s+\\w+",
+      "name": "entity.name.function.serpent"
+    },
+    "pin": {
+      "match": "^pin\\s+\\w+",
+      "name": "entity.name.type.serpent"
+    },
+    "number": {
+      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.serpent"
+    },
+    "string": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.quoted.double.serpent"
+    },
+    "zaid": {
+      "match": "\\d{4,6}\\.\\d{2}[cC]",
+      "name": "string.other.zaid.serpent"
+    }
+  }
+}
