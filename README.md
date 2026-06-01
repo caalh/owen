@@ -3,9 +3,9 @@
 <p align="center">The nuclear reactor modeling toolkit for VS Code &amp; Cursor — syntax highlighting, a visual lattice builder, geometry preview, deep input validation, and workflow automation for <strong>MCNP</strong>, <strong>OpenMC</strong>, <strong>Serpent</strong>, and <strong>SCONE</strong>.</p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen"><img alt="VS Code Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/belvoirdynamics.owen?label=VS%20Marketplace&logo=visualstudiocode&color=0b1020"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen"><img alt="VS Code Marketplace Installs" src="https://img.shields.io/visual-studio-marketplace/i/belvoirdynamics.owen?label=installs&color=f59e0b"></a>
-  <a href="https://open-vsx.org/extension/belvoirdynamics/owen"><img alt="Open VSX Version" src="https://img.shields.io/open-vsx/v/belvoirdynamics/owen?label=Open%20VSX&color=0b1020"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen-neutronics"><img alt="VS Code Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/belvoirdynamics.owen-neutronics?label=VS%20Marketplace&logo=visualstudiocode&color=0b1020"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen-neutronics"><img alt="VS Code Marketplace Installs" src="https://img.shields.io/visual-studio-marketplace/i/belvoirdynamics.owen-neutronics?label=installs&color=f59e0b"></a>
+  <a href="https://open-vsx.org/extension/belvoirdynamics/owen-neutronics"><img alt="Open VSX Version" src="https://img.shields.io/open-vsx/v/belvoirdynamics/owen-neutronics?label=Open%20VSX&color=0b1020"></a>
   <a href="https://github.com/caalh/owen/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/v/release/caalh/owen?label=release&color=f59e0b"></a>
   <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-0b1020"></a>
 </p>
@@ -39,16 +39,16 @@ leaving your editor.
 **From the Marketplace** (once published):
 
 1. Open the Extensions view (`Ctrl+Shift+X` / `Cmd+Shift+X`).
-2. Search for **OWEN** and click **Install** — or install [`belvoirdynamics.owen`](https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen).
+2. Search for **OWEN** and click **Install** — or install [`belvoirdynamics.owen-neutronics`](https://marketplace.visualstudio.com/items?itemName=belvoirdynamics.owen-neutronics).
 
-**From Open VSX** (Cursor, VSCodium, etc.): install [`belvoirdynamics/owen`](https://open-vsx.org/extension/belvoirdynamics/owen).
+**From Open VSX** (Cursor, VSCodium, etc.): install [`belvoirdynamics/owen-neutronics`](https://open-vsx.org/extension/belvoirdynamics/owen-neutronics).
 
 **From a VSIX** (available now via [GitHub Releases](https://github.com/caalh/owen/releases/latest)):
 
 ```bash
-code --install-extension owen-0.1.0.vsix
+code --install-extension owen-neutronics-0.1.0.vsix
 # Cursor:
-cursor --install-extension owen-0.1.0.vsix
+cursor --install-extension owen-neutronics-0.1.0.vsix
 ```
 
 Or in the editor: Extensions view → `...` menu → **Install from VSIX…**.

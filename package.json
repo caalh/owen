@@ -1,5 +1,5 @@
 {
-  "name": "owen",
+  "name": "owen-neutronics",
   "displayName": "OWEN — Open Workflow for Engineered Neutronics",
   "description": "Nuclear reactor modeling toolkit: syntax highlighting, lattice builder, geometry preview, validation, and workflow automation for MCNP, OpenMC, Serpent, and SCONE.",
   "version": "0.1.0",
