@@ -1,5 +1,5 @@
 <h1 align="center">OWEN</h1>
-<p align="center"><strong>Open Workflow for Engineered Neutronics</strong></p>
+<p align="center"><strong>Open Workspace for Engineered Neutronics</strong></p>
 <p align="center">The nuclear reactor modeling toolkit for VS Code &amp; Cursor — syntax highlighting, a visual lattice builder, geometry preview, deep input validation, and workflow automation for <strong>MCNP</strong>, <strong>OpenMC</strong>, <strong>Serpent</strong>, and <strong>SCONE</strong>.</p>
 
 <p align="center">
