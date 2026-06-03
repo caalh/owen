@@ -7,13 +7,16 @@ export class LatticeBuilderPanel {
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
     private _disposables: vscode.Disposable[] = [];
+    private _targetEditor: vscode.TextEditor | undefined;
 
     public static createOrShow(extensionUri: vscode.Uri) {
-        const column = vscode.window.activeTextEditor
-            ? vscode.window.activeTextEditor.viewColumn
-            : undefined;
+        const activeEditor = vscode.window.activeTextEditor;
+        const column = activeEditor ? activeEditor.viewColumn : undefined;
 
         if (LatticeBuilderPanel.currentPanel) {
+            if (activeEditor) {
+                LatticeBuilderPanel.currentPanel._targetEditor = activeEditor;
+            }
             LatticeBuilderPanel.currentPanel._panel.reveal(column);
             return;
         }
@@ -29,6 +32,7 @@ export class LatticeBuilderPanel {
         );
 
         LatticeBuilderPanel.currentPanel = new LatticeBuilderPanel(panel, extensionUri);
+        LatticeBuilderPanel.currentPanel._targetEditor = activeEditor;
     }
 
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -36,6 +40,12 @@ export class LatticeBuilderPanel {
         this._extensionUri = extensionUri;
 
         this._panel.webview.html = this._getHtml();
+
+        vscode.window.onDidChangeActiveTextEditor((editor) => {
+            if (editor) {
+                this._targetEditor = editor;
+            }
+        }, null, this._disposables);
 
         this._panel.webview.onDidReceiveMessage(
             (message) => {
@@ -52,13 +62,26 @@ export class LatticeBuilderPanel {
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     }
 
-    private _insertCode(code: string) {
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            editor.edit((editBuilder) => {
-                editBuilder.insert(editor.selection.active, code);
-            });
+    private async _insertCode(code: string) {
+        let editor = vscode.window.activeTextEditor ?? await this._reopenTargetEditor();
+        if (!editor) {
+            const document = await vscode.workspace.openTextDocument({ content: '' });
+            editor = await vscode.window.showTextDocument(document, vscode.ViewColumn.One);
         }
+        this._targetEditor = editor;
+
+        const position = editor.selection.active;
+        await editor.edit((editBuilder) => {
+            editBuilder.insert(position, code);
+        });
+    }
+
+    private async _reopenTargetEditor(): Promise<vscode.TextEditor | undefined> {
+        const document = this._targetEditor?.document;
+        if (!document || document.isClosed) {
+            return undefined;
+        }
+        return vscode.window.showTextDocument(document, this._targetEditor?.viewColumn, false);
     }
 
     public dispose() {

@@ -3,6 +3,14 @@ import { detectMonteCarloLanguage } from '../util/detectLanguage';
 import { extractCylinders, CylinderSpec } from './extractor';
 
 let currentPanel: vscode.WebviewPanel | undefined;
+let webviewReady = false;
+let lastPayload: { cylinders: CylinderSpec[]; language: string } | undefined;
+
+function postPayload(): void {
+    if (currentPanel && webviewReady && lastPayload) {
+        currentPanel.webview.postMessage({ type: 'cylinders', ...lastPayload });
+    }
+}
 
 export function registerGeometryPreview(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('owen.openGeometryPreview', async () => {
@@ -13,26 +21,37 @@ export function registerGeometryPreview(context: vscode.ExtensionContext): vscod
         }
         const language = detectMonteCarloLanguage(editor.document) ?? 'mcnp';
         const cylinders = extractCylinders(editor.document.getText(), language);
+        lastPayload = { cylinders, language };
 
         if (currentPanel) {
             currentPanel.reveal(vscode.ViewColumn.Beside);
         } else {
+            webviewReady = false;
             currentPanel = vscode.window.createWebviewPanel(
                 'owenGeometryPreview',
                 'OWEN: 3D Geometry Preview',
                 vscode.ViewColumn.Beside,
                 { enableScripts: true, retainContextWhenHidden: true },
             );
-            currentPanel.onDidDispose(() => { currentPanel = undefined; }, null, context.subscriptions);
+            currentPanel.onDidDispose(() => { currentPanel = undefined; webviewReady = false; }, null, context.subscriptions);
+            currentPanel.webview.onDidReceiveMessage((msg) => {
+                if (msg && msg.type === 'ready') {
+                    webviewReady = true;
+                    postPayload();
+                }
+            }, null, context.subscriptions);
             currentPanel.webview.html = buildHtml(currentPanel.webview);
         }
 
-        currentPanel.webview.postMessage({ type: 'cylinders', cylinders, language });
+        // When the panel already exists the webview listener is live, so send now;
+        // on first open the 'ready' handshake above delivers the payload instead.
+        postPayload();
+
         if (cylinders.length === 0) {
             vscode.window.showInformationMessage(
                 language === 'mcnp'
-                    ? 'OWEN: no cz cylinders found in the active deck.'
-                    : `OWEN: 3D extraction for ${language} is not implemented yet — see the OWEN README ROADMAP.`,
+                    ? 'OWEN: no cz cylinders found in the active deck — showing a default pin.'
+                    : `OWEN: 3D extraction for ${language} found no geometry — showing a default pin. See the OWEN README ROADMAP.`,
             );
         }
     });
@@ -68,6 +87,8 @@ function buildHtml(webview: vscode.Webview): string {
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+    const vscode = acquireVsCodeApi();
+
     const stage = document.getElementById('stage');
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -102,9 +123,16 @@ function buildHtml(webview: vscode.Webview): string {
       }
     }
 
+    const DEFAULT_PIN = [
+      { x: 0, y: 0, z: 0, radius: 0.41, height: 10, color: '#ffb703' },
+      { x: 0, y: 0, z: 0, radius: 0.475, height: 10, color: '#2a9d8f' },
+    ];
+
     function render(cylinders) {
       clear();
-      const sorted = [...cylinders].sort((a, b) => b.radius - a.radius);
+      const incoming = Array.isArray(cylinders) ? cylinders : [];
+      const source = incoming.length ? incoming : DEFAULT_PIN;
+      const sorted = [...source].sort((a, b) => b.radius - a.radius);
       sorted.forEach((c, idx) => {
         const geo = new THREE.CylinderGeometry(c.radius, c.radius, Math.max(0.01, c.height), 48, 1, true);
         const fillColor = (typeof c.color === 'string' && c.color.length > 0)
@@ -160,6 +188,10 @@ function buildHtml(webview: vscode.Webview): string {
         render(Array.isArray(data.cylinders) ? data.cylinders : []);
       }
     });
+
+    // Signal the extension that the listener is live so it can deliver geometry
+    // without racing the asynchronous three.js module import.
+    vscode.postMessage({ type: 'ready' });
   </script>
 </body>
 </html>`;

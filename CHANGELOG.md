@@ -5,6 +5,21 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] — 2026-06-02
+
+Maintenance release with three bug fixes found during OpenMC capability testing.
+
+### Fixed
+
+- **OpenMC snippets now fire.** The OpenMC Python snippet prefixes were hyphenated
+  (`omc-pin-script`, `omc-settings`, …), and VS Code does not trigger snippet completion on a
+  hyphen in Python (where `-` is a word separator), so typing a prefix just inserted plain
+  text. Prefixes are now underscore-separated: `omc_material`, `omc_pin`, `omc_lattice`,
+  `omc_settings`, `omc_model`, `omc_pin_script`, `omc_assembly_script`.
+- **Lattice Builder "Insert at Cursor"** no longer silently does nothing when the Lattice
+  Builder panel has focus; it inserts into the last active editor (or a new untitled file).
+- **3D Geometry Preview** now renders the pin geometry instead of showing only empty axes.
+
 ## [0.1.0] — 2026-05-26
 
 Initial public release of OWEN — Open Workspace for Engineered Neutronics,

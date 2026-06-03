@@ -1,6 +1,6 @@
 {
   "OpenMC Material": {
-    "prefix": "omc-material",
+    "prefix": "omc_material",
     "body": [
       "${1:mat} = openmc.Material(name=\"${2:Material}\")",
       "${1:mat}.add_element(\"${3:U}\", ${4:1.0}, enrichment=${5:4.5})",
@@ -9,7 +9,7 @@
     "description": "OpenMC material definition"
   },
   "OpenMC Pin Universe": {
-    "prefix": "omc-pin",
+    "prefix": "omc_pin",
     "body": [
       "# --- ${1:Fuel Pin} Universe ---",
       "${2:fuel_cyl} = openmc.ZCylinder(r=${3:0.41})",
@@ -24,7 +24,7 @@
     "description": "OpenMC pin cell universe"
   },
   "OpenMC Rectangular Lattice": {
-    "prefix": "omc-lattice",
+    "prefix": "omc_lattice",
     "body": [
       "lattice = openmc.RectLattice(name=\"${1:assembly}\")",
       "lattice.pitch = (${2:1.26}, ${2:1.26})",
@@ -34,7 +34,7 @@
     "description": "OpenMC rectangular lattice"
   },
   "OpenMC Settings": {
-    "prefix": "omc-settings",
+    "prefix": "omc_settings",
     "body": [
       "settings = openmc.Settings()",
       "settings.batches = ${1:200}",
@@ -48,7 +48,7 @@
     "description": "OpenMC eigenvalue settings"
   },
   "OpenMC Model": {
-    "prefix": "omc-model",
+    "prefix": "omc_model",
     "body": [
       "model = openmc.model.Model(geometry, materials, settings, tallies)",
       "# model.export_to_model_xml()"
@@ -57,7 +57,7 @@
   },
 
   "OpenMC Full Pin Cell Script": {
-    "prefix": "omc-pin-script",
+    "prefix": "omc_pin_script",
     "scope": "python",
     "body": [
       "import openmc",
@@ -123,7 +123,7 @@
   },
 
   "OpenMC Full Assembly Script": {
-    "prefix": "omc-assembly-script",
+    "prefix": "omc_assembly_script",
     "scope": "python",
     "body": [
       "import openmc",

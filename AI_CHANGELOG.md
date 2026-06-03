@@ -12,6 +12,83 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-02 — v0.1.1 — Three bug fixes (lattice insert, 3D preview, snippets)
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Maintenance release bundling three fixes found during the OpenMC capability evaluation
+(`docs/OPENMC_EVALUATION.md`). Version bumped `0.1.0` → `0.1.1` in `package.json`.
+
+- **Snippets never fired in OpenMC `.py` files.** Every OpenMC snippet prefix used hyphens
+  (`omc-pin-script`, `omc-settings`, …). VS Code only auto-triggers IntelliSense at the end
+  of a "word", and the prefix's replacement range comes from the language's word pattern;
+  Python treats `-` as a word separator, so typing the full hyphenated prefix left the
+  "current word" as only the segment after the last `-` — the snippet stopped matching and
+  word-based completion filled in plain text instead (microsoft/vscode #62906, #205332).
+  **Fix:** renamed all seven `snippets/openmc.json` prefixes to underscores
+  (`omc_material`, `omc_pin`, `omc_lattice`, `omc_settings`, `omc_model`, `omc_pin_script`,
+  `omc_assembly_script`), which are single Python words and trigger correctly. Updated the
+  T3 prefixes in `docs/OPENMC_EVALUATION.md` to match. MCNP/Serpent/SCONE are extension-owned
+  languages and were left unchanged (out of scope for this fix).
+- **Lattice Builder "Insert at Cursor" no-op** (see prior entry, now shipped in 0.1.1): the
+  webview read `activeTextEditor` at message-handle time, which is `undefined` while the
+  panel holds focus; `latticeBuilder.ts` now tracks the last real editor and falls back to a
+  fresh untitled document.
+- **3D preview rendered empty axes only** (`src/preview/webview.ts`): the OpenMC pin geometry
+  was not drawn due to a render-timing race; the preview now renders the extracted pin
+  cylinders.
+- **Build:** `npm run typecheck` clean; `npm run compile` (esbuild) bundles `out/extension.js`;
+  packaged with `vsce` → `owen-neutronics-0.1.1.vsix` (snippets confirmed bundled).
+- **Sync:** applied to the monorepo and mirrored to `caalh/owen`; tagged `v0.1.1`.
+
+---
+
+## 2026-06-02 — Fix: Lattice Builder "Insert at Cursor" no-op
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+- **Bug:** the Lattice Builder webview's **Insert at Cursor** button silently did nothing.
+  Root cause in `src/panels/latticeBuilder.ts` (`_insertCode`): it read
+  `vscode.window.activeTextEditor` *at message-handle time*, but the focused webview panel
+  makes `activeTextEditor` `undefined`, so the `if (editor)` guard fell through with no
+  insert and no warning. The webview→extension message contract (`insertCode` / `code`) was
+  correct — only the extension side was at fault.
+- **Fix:** track the last real text editor. `createOrShow` now captures the active editor
+  before the panel grabs focus, and the panel subscribes to
+  `window.onDidChangeActiveTextEditor` (ignoring `undefined`). `_insertCode` resolves a
+  target in priority order — current `activeTextEditor`, then the stored editor re-shown via
+  `showTextDocument` (matched by document, since `TextEditor` handles aren't stable) — and
+  falls back to a fresh untitled document when nothing is open, so the action is never a
+  silent no-op.
+- **Scope:** the sibling 3D geometry preview (`src/preview/webview.ts`) reads the active
+  editor *up front* when its command runs and doesn't insert, so it was unaffected and left
+  unchanged. `commands/insertMaterial.ts` runs as a plain command (editor still focused), so
+  its `activeTextEditor` use is correct.
+- **Build:** `npm run typecheck` clean; `npm run compile` (esbuild) bundles `out/extension.js`
+  with the new code path.
+- **Publish caveat:** this only fixes the source/bundle. Installed copies still need a version
+  bump + `vsce`/`ovsx` publish, and the public mirror `caalh/owen` needs syncing (no local
+  public clone present at commit time).
+
+---
+
+## 2026-06-02 — OpenMC capability evaluation plan
+
+**AI Agent:** Claude (Cursor IDE)
+
+- **Added `docs/OPENMC_EVALUATION.md`** — a hands-on, source-grounded test matrix (T1–T11)
+  for evaluating what OWEN can actually do with OpenMC: activation/regression guard,
+  highlighting, snippets, validation gotchas, material insertion, tutorial deep-links,
+  run-simulation, 3D geometry preview, lattice builder, parameter sweep, and the community
+  library. Includes a canonical correct-API pin-cell script, a scoring rubric, and an honest
+  "known caveats" section (heuristic preview, import-sniffing detection, no OpenMC-specific
+  grammar, community library disabled by default).
+- **No code changed** — documentation only. New `docs/` folder in the OWEN subtree.
+- **Sync caveat:** doc added in the monorepo (`BelvoirDynamics/owen/`) only; mirror to
+  `caalh/owen` still pending (no local public clone found at commit time).
+
+---
+
 ## 2026-06-02 — AI maintainer docs + "Workspace" branding
 
 **AI Agent:** Claude (Cursor IDE)
