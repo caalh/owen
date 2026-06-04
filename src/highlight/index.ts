@@ -12,6 +12,7 @@ import {
     buildRules,
     paletteIdFromLabel,
 } from './palettes';
+import { showPalettePreview, postHighlight } from './previewPanel';
 
 // Shape of editor.tokenColorCustomizations we care about. The object may also
 // carry theme-scoped keys ("[Theme Name]": {...}) and other token settings; we
@@ -70,7 +71,67 @@ export async function applyPalettes(): Promise<void> {
     );
 }
 
-async function chooseHighlightPalette(): Promise<void> {
+async function applySelection(language: Language, id: PaletteId): Promise<void> {
+    const owenCfg = vscode.workspace.getConfiguration('owen');
+    await owenCfg.update(
+        `highlight.${language}.palette`,
+        PALETTE_LABELS[id],
+        vscode.ConfigurationTarget.Global,
+    );
+    // The configuration-change listener applies the palette, but apply here too
+    // so it takes effect even if the value was already set to this label.
+    await applyPalettes();
+
+    vscode.window.showInformationMessage(
+        `OWEN: ${LANGUAGE_LABELS[language]} highlighting set to "${PALETTE_LABELS[id]}".`,
+    );
+}
+
+interface PaletteItem extends vscode.QuickPickItem {
+    _id: PaletteId;
+}
+
+/**
+ * Show a live palette Quick Pick wired to the preview panel: as the user moves
+ * through the items, the matching block in the preview is outlined/scrolled into
+ * view; accepting applies it. Resolves to the chosen palette or undefined.
+ */
+function pickPaletteWithPreview(language: Language, currentId: PaletteId): Promise<PaletteId | undefined> {
+    return new Promise((resolve) => {
+        const qp = vscode.window.createQuickPick<PaletteItem>();
+        qp.title = `Highlight palette — ${LANGUAGE_LABELS[language]}`;
+        qp.placeholder = 'Move to preview a palette · Enter to apply · Esc to cancel';
+        qp.matchOnDescription = true;
+        qp.items = PALETTE_IDS.map<PaletteItem>((id) => ({
+            label: `${id === currentId ? '$(check) ' : ''}${PALETTE_LABELS[id]}`,
+            description: PALETTE_DESCRIPTIONS[id],
+            _id: id,
+        }));
+        const activeItem = qp.items.find((i) => i._id === currentId);
+        if (activeItem) qp.activeItems = [activeItem];
+
+        let accepted = false;
+        qp.onDidChangeActive((items) => {
+            if (items[0]) postHighlight(items[0]._id);
+        });
+        qp.onDidAccept(() => {
+            accepted = true;
+            const chosen = qp.selectedItems[0]?._id ?? qp.activeItems[0]?._id;
+            qp.hide();
+            resolve(chosen);
+        });
+        qp.onDidHide(() => {
+            qp.dispose();
+            if (!accepted) resolve(undefined);
+        });
+
+        // Seed the preview with the current selection before the user moves.
+        postHighlight(currentId);
+        qp.show();
+    });
+}
+
+async function chooseHighlightPalette(context: vscode.ExtensionContext): Promise<void> {
     const owenCfg = vscode.workspace.getConfiguration('owen');
 
     const langPick = await vscode.window.showQuickPick(
@@ -86,28 +147,14 @@ async function chooseHighlightPalette(): Promise<void> {
     const language = langPick._lang;
     const currentId = readSelection(owenCfg, language);
 
-    const palettePick = await vscode.window.showQuickPick(
-        PALETTE_IDS.map<vscode.QuickPickItem & { _id: PaletteId }>((id) => ({
-            label: `${id === currentId ? '$(check) ' : ''}${PALETTE_LABELS[id]}`,
-            description: PALETTE_DESCRIPTIONS[id],
-            _id: id,
-        })),
-        { placeHolder: `Choose a palette for ${LANGUAGE_LABELS[language]}` },
-    );
-    if (!palettePick) return;
+    // Open the side-by-side preview of all four palettes for this language so the
+    // user can compare before choosing.
+    showPalettePreview(context, language);
 
-    await owenCfg.update(
-        `highlight.${language}.palette`,
-        PALETTE_LABELS[palettePick._id],
-        vscode.ConfigurationTarget.Global,
-    );
-    // The configuration-change listener applies the palette, but apply here too
-    // so it takes effect even if the value was already set to this label.
-    await applyPalettes();
+    const chosen = await pickPaletteWithPreview(language, currentId);
+    if (!chosen) return;
 
-    vscode.window.showInformationMessage(
-        `OWEN: ${LANGUAGE_LABELS[language]} highlighting set to "${PALETTE_LABELS[palettePick._id]}".`,
-    );
+    await applySelection(language, chosen);
 }
 
 /**
@@ -117,7 +164,7 @@ async function chooseHighlightPalette(): Promise<void> {
  */
 export function registerHighlightPalettes(context: vscode.ExtensionContext): void {
     context.subscriptions.push(
-        vscode.commands.registerCommand('owen.chooseHighlightPalette', chooseHighlightPalette),
+        vscode.commands.registerCommand('owen.chooseHighlightPalette', () => chooseHighlightPalette(context)),
         vscode.workspace.onDidChangeConfiguration((e) => {
             if (e.affectsConfiguration('owen.highlight')) {
                 void applyPalettes();

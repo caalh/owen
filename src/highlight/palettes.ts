@@ -150,6 +150,25 @@ export interface TextMateRule {
 }
 
 /**
+ * Resolve the {@link TokenStyle} a palette assigns to a given TextMate scope of
+ * a language, or `undefined` if the scope is not OWEN-managed for that language.
+ *
+ * This is the single source of truth the palette-preview webview uses to color
+ * its sample tokens: each sample token is tagged with the same scope key the
+ * grammars emit, and the preview asks this function for the color — so the
+ * preview shows exactly what the editor would render for that palette.
+ */
+export function styleForScope(
+    language: Language,
+    palette: PaletteId,
+    scope: string,
+): TokenStyle | undefined {
+    const role = SCOPE_ROLES[language][scope];
+    if (!role) return undefined;
+    return ROLE_COLORS[palette][role];
+}
+
+/**
  * Build the `editor.tokenColorCustomizations.textMateRules` entries for one
  * language under the given palette. One rule per scope (scope kept as a plain
  * string) so OWEN-managed rules are trivially identifiable via MANAGED_SCOPES.

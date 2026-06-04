@@ -12,6 +12,65 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-04 — v0.1.5 — Highlight-palette preview webview (all 4 palettes at once)
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.4` → `0.1.5` in `package.json` and `package-lock.json`.
+
+### What & why
+
+v0.1.3 let users choose one of four palettes per language but gave no way to *see* a palette
+before committing — you had to apply it, look at a real file, and repeat. This release adds a
+**preview webview** so all four palettes are visible side by side at the moment of choosing.
+
+- **`src/highlight/previewPanel.ts` (new).** Owns a single reusable `WebviewPanel`
+  (`owenPalettePreview`) opened beside the editor with `preserveFocus: true` so the Quick Pick
+  keeps focus. For the selected language it renders a short, domain-correct sample as four
+  labeled cards (Classic / Solarized / High Contrast / Pastel), each coloring the **same**
+  sample.
+  - **Single source of truth for colors.** Samples are defined as token sequences, each token
+    tagged with the *same* TextMate scope key the grammars emit (e.g. `constant.other.zaid.mcnp`,
+    `support.class.openmc`). Each token is colored by calling the new
+    `styleForScope(language, palette, scope)` exported from `palettes.ts`, which resolves
+    scope → role → palette color. No runtime tokenizer; the preview shows exactly what the
+    editor's `tokenColorCustomizations` would produce. Untagged tokens fall back to the default
+    foreground.
+  - **Scope accuracy.** Sample tokens were tagged against the actual grammars under
+    `syntaxes/` — e.g. MCNP surfaces use lowercase `rcc`/`rpp` (the grammar's `surface` regex is
+    lowercase), `imp` is `keyword.control.mcnp`, `m1` is `entity.name.material.mcnp`; SCONE
+    `geometry {` is `entity.name.section.scone` (the `block` pattern wins over `keyword` because
+    it precedes it in the grammar).
+  - **Theme-native styling.** Uses `--vscode-editor-background`, `--vscode-editor-font-family`,
+    `--vscode-editor-font-size`, `--vscode-panel-border`, `--vscode-focusBorder` so it matches
+    the user's theme. HTML is escaped. No external/CDN scripts (unlike the 3D preview), so no
+    special CSP is needed.
+  - **`postHighlight(palette)`** posts a message that outlines the matching card and
+    `scrollIntoView`s it; a `ready` handshake (mirroring `src/preview/webview.ts`) re-sends the
+    last highlight if it arrived before the webview script loaded.
+
+- **`src/highlight/index.ts`.** Refactored the chooser:
+  - Extracted `applySelection(language, id)` (unchanged write + `applyPalettes()` + info toast).
+  - **Live Quick Pick (bonus UX wired).** Replaced the second `showQuickPick` with a
+    `createQuickPick()` so `onDidChangeActive` can drive `postHighlight(...)` as the user moves
+    through palettes; `onDidAccept` applies, `onDidHide` resolves/cancels. The current palette is
+    pre-selected and seeds the preview. Language pick is unchanged.
+  - `chooseHighlightPalette(context)` now takes the `ExtensionContext` (needed for the panel's
+    disposables); the command registration passes it via an arrow wrapper.
+
+### Verified
+
+- `npx tsc --noEmit` clean; `node esbuild.js` clean (preview panel inlined into
+  `out/extension.js`).
+- `npx vsce package` → `owen-neutronics-0.1.5.vsix`.
+- No new dependencies. No editor settings forced. Identity (`name`, `publisher`, command ids)
+  unchanged. The lazy-Supabase rule is untouched.
+
+### Caveats
+
+- Visual confirmation requires installing 0.1.5 and running **OWEN: Choose Highlight Palette**.
+- Marketplace / Open VSX republish need the user's tokens (commands in the release report).
+
 ## 2026-06-04 — v0.1.4 — Snippets auto-surface while typing (trigger chars + preselect)
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

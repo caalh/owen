@@ -5,6 +5,23 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] — 2026-06-04
+
+See your highlight colors **before** you pick them.
+
+### Added
+
+- **Live palette preview.** Running **OWEN: Choose Highlight Palette** (Command Palette or
+  the right-click **OWEN** submenu) now opens a side panel showing a short, representative
+  code sample for the language you picked, rendered in **all four palettes at once** —
+  Classic, Solarized, High Contrast, and Pastel — so you can compare them directly. As you
+  move through the palette Quick Pick, the matching block in the preview is outlined and
+  scrolled into view; press Enter to apply. The samples are real per-language snippets (MCNP
+  cells/surfaces/material with a ZAID, OpenMC `Material`/`IndependentSource`/
+  `RectangularPrism`, a Serpent `mat`/`surf`/`cell`/`set` deck, and a SCONE dictionary block)
+  colored from the exact same scope→color map the editor uses, so the preview matches what
+  you'll get. The preview uses your editor's background and monospace font.
+
 ## [0.1.4] — 2026-06-04
 
 The OpenMC snippets now pop up **automatically as you type** the prefix — no Ctrl+Space needed.
