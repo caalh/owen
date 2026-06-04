@@ -5,6 +5,29 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] — 2026-06-04
+
+Follow-up release: the OpenMC snippets still did not surface after the 0.1.1 underscore
+rename, and the right-click menu only exposed three commands.
+
+### Fixed
+
+- **OpenMC snippets now reliably appear.** The 0.1.1 fix (hyphen → underscore prefixes) was
+  correct but not sufficient: declarative `contributes.snippets` only show in the suggestion
+  widget, where the Python language server's completions routinely out-rank or suppress them,
+  so the `omc_*` prefixes still looked dead. OWEN now registers an explicit
+  `CompletionItemProvider` (kind `Snippet`) for Python, MCNP, Serpent, and SCONE that loads
+  the same snippet JSON and serves the prefixes directly. They now show on **Ctrl+Space** and
+  as you type `omc_…`, independent of `editor.snippetSuggestions` / `editor.quickSuggestions`.
+  The Python snippets are gated to files that `import openmc`.
+
+### Added
+
+- **Right-click context menu.** All eight OWEN commands (Validate Input File, Insert Material
+  from Database, Open Lattice Builder, Open 3D Geometry Preview, Run Simulation, Run Parameter
+  Sweep, Open Tutorial, Search Reactor Library) are now grouped under an **OWEN** submenu in
+  the editor right-click menu, shown for `mcnp`, `serpent`, `scone`, and `python` files.
+
 ## [0.1.1] — 2026-06-02
 
 Maintenance release with three bug fixes found during OpenMC capability testing.

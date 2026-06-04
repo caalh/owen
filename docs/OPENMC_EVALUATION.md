@@ -171,21 +171,32 @@ Pass = Python highlighting works; mark Partial if you expected OpenMC-specific t
 
 **Feature:** Snippets (`snippets/openmc.json`, scoped to `python`). Prefixes:
 `omc_material`, `omc_pin`, `omc_lattice`, `omc_settings`, `omc_model`, `omc_pin_script`,
-`omc_assembly_script`. (Prefixes use underscores, not hyphens: Python treats `-` as a word
-separator, so a hyphenated prefix never triggers IntelliSense as a single word.)
+`omc_assembly_script`.
 
-**Invoke:** In a `.py` file, type a prefix and accept the completion.
+> **How they trigger (v0.1.2+):** the snippets are delivered by an explicit
+> `CompletionItemProvider` (`src/completions/snippets.ts`), not only the declarative
+> `contributes.snippets`. Earlier versions relied on declarative snippets alone, which only
+> appear in the suggestion widget where the Python language server's completions out-rank or
+> suppress them — so the prefixes looked dead. The provider loads the same snippet JSON
+> (single source of truth) and serves the prefixes directly, so they appear on **Ctrl+Space**
+> and as you type `omc_…`, regardless of your `editor.snippetSuggestions` /
+> `editor.quickSuggestions` settings. The Python snippets only fire in files that
+> `import openmc` (OWEN's OpenMC detection); MCNP/Serpent/SCONE snippets always fire.
+
+**Invoke:** In a `.py` file that contains `import openmc`, type a prefix (or press
+Ctrl+Space) and accept the completion.
 
 **Steps:**
-1. New file `snippet_test.py`. Type `omc_pin_script`, press Tab/Enter.
-2. Type `omc_settings`, accept it.
-3. Inspect the inserted code.
+1. New file `snippet_test.py`; add `import openmc` on the first line.
+2. Type `omc_pin_script` (or press **Ctrl+Space** and pick it), press Tab/Enter.
+3. Type `omc_settings`, accept it.
+4. Inspect the inserted code.
 
 **Expected / pass criteria:** Full, correct-API code is inserted. Verify the inserted
 script uses `openmc.IndependentSource(...)`, `openmc.model.RectangularPrism(width=, height=)`,
 sets `cell.temperature` (not on Material), and ends with
 `sp_path = model.run(...)` → `with openmc.StatePoint(sp_path) as sp:`. The inserted
-`omc-pin-script` should run standalone with OpenMC.
+`omc_pin_script` should run standalone with OpenMC.
 
 **Score:** ☐ Pass ☐ Partial ☐ Fail ☐ Blocked — notes: ________________
 

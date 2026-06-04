@@ -12,6 +12,45 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-04 — v0.1.2 — Snippet completion provider + right-click context menu
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.1` → `0.1.2` in `package.json` and `package-lock.json`.
+
+- **Snippets still didn't fire after the 0.1.1 underscore rename.** Investigated from
+  scratch: the `contributes.snippets` entries are correct (`language: "python"` →
+  `./snippets/openmc.json`, prefixes are valid underscore words like `omc_pin_script`), and
+  `npx vsce ls` confirms all four snippet JSON files ship in the VSIX. The real problem is
+  that **declarative snippets only surface through the suggestion widget**, where in Python
+  files the language server (Pylance/Jedi) supplies its own completions that out-rank or
+  suppress OWEN's, so the prefixes appeared dead unless the user had specifically tuned
+  `editor.snippetSuggestions` / `editor.quickSuggestions`. **Fix:** added
+  `src/completions/snippets.ts`, which loads the snippet JSON at runtime (single source of
+  truth — the JSON files still ship and are still declared) and registers a
+  `vscode.languages.registerCompletionItemProvider` for `python`, `mcnp`, `serpent`, and
+  `scone`. Each entry becomes a `CompletionItem` of kind `Snippet` with
+  `insertText: new vscode.SnippetString(body)`, `filterText`/`label` = the prefix, and
+  `sortText` biased ahead of word completions. The Python provider is gated on
+  `detectMonteCarloLanguage(doc) === 'openmc'` so it only fires in files that `import openmc`.
+  Registered first in `activate()`. Snippets now show on **Ctrl+Space** and while typing the
+  prefix, regardless of user settings or language-server ranking. Updated
+  `docs/OPENMC_EVALUATION.md` T3 accordingly.
+- **All commands added to the editor right-click menu.** `contributes.menus` previously
+  exposed only three commands directly in `editor/context`. Replaced that with a
+  `contributes.submenus` entry (`id: owen.contextMenu`, label `OWEN`) referenced once from
+  `editor/context`, and placed all eight commands under it with grouped ordering
+  (`1_analyze`: validate, insert material; `2_build`: lattice builder, 3D preview; `3_run`:
+  run simulation, parameter sweep; `4_help`: tutorial, reactor library). The submenu's `when`
+  is `editorTextFocus && editorLangId =~ /^(mcnp|serpent|scone|python)$/`. Every entry maps to
+  a real command id in `contributes.commands`.
+- **Build:** `npm run typecheck` (tsc --noEmit) clean; `node esbuild.js` bundles
+  `out/extension.js`; packaged with `vsce` → `owen-neutronics-0.1.2.vsix` (snippets confirmed
+  bundled via `vsce ls`).
+- **Sync:** applied to the monorepo and mirrored to `caalh/owen`; tagged `v0.1.2`.
+
+---
+
 ## 2026-06-02 — v0.1.1 — Three bug fixes (lattice insert, 3D preview, snippets)
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

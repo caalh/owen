@@ -7,9 +7,12 @@ import { registerInsertMaterial } from './commands/insertMaterial';
 import { registerOpenTutorial } from './commands/openTutorial';
 import { registerSearchReactorLibrary } from './community/browser';
 import { registerGeometryPreview } from './preview/webview';
+import { registerSnippetCompletions } from './completions/snippets';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('OWEN extension activated');
+
+    registerSnippetCompletions(context);
 
     context.subscriptions.push(
         vscode.commands.registerCommand('owen.openLatticeBuilder', () => {

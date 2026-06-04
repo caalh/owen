@@ -2,7 +2,7 @@
   "name": "owen-neutronics",
   "displayName": "OWEN — Open Workspace for Engineered Neutronics",
   "description": "Nuclear reactor modeling toolkit: syntax highlighting, lattice builder, geometry preview, validation, and workflow automation for MCNP, OpenMC, Serpent, and SCONE.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "belvoirdynamics",
   "license": "SEE LICENSE IN LICENSE",
   "icon": "assets/owen-icon.png",
@@ -151,22 +151,52 @@
         "category": "OWEN"
       }
     ],
+    "submenus": [
+      {
+        "id": "owen.contextMenu",
+        "label": "OWEN"
+      }
+    ],
     "menus": {
       "editor/context": [
         {
-          "command": "owen.openLatticeBuilder",
+          "submenu": "owen.contextMenu",
           "group": "owen@1",
-          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
-        },
+          "when": "editorTextFocus && editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+        }
+      ],
+      "owen.contextMenu": [
         {
           "command": "owen.validateInput",
-          "group": "owen@2",
-          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+          "group": "1_analyze@1"
         },
         {
           "command": "owen.insertMaterial",
-          "group": "owen@3",
-          "when": "editorLangId =~ /^(mcnp|serpent|scone|python)$/"
+          "group": "1_analyze@2"
+        },
+        {
+          "command": "owen.openLatticeBuilder",
+          "group": "2_build@1"
+        },
+        {
+          "command": "owen.openGeometryPreview",
+          "group": "2_build@2"
+        },
+        {
+          "command": "owen.runSimulation",
+          "group": "3_run@1"
+        },
+        {
+          "command": "owen.runSweep",
+          "group": "3_run@2"
+        },
+        {
+          "command": "owen.openTutorial",
+          "group": "4_help@1"
+        },
+        {
+          "command": "owen.searchReactorLibrary",
+          "group": "4_help@2"
         }
       ]
     },
