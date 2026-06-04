@@ -3,12 +3,12 @@
   "name": "MCNP",
   "patterns": [
     { "include": "#comment" },
-    { "include": "#keyword" },
     { "include": "#material" },
     { "include": "#tally" },
+    { "include": "#keyword" },
     { "include": "#surface" },
-    { "include": "#number" },
-    { "include": "#zaid" }
+    { "include": "#zaid" },
+    { "include": "#number" }
   ],
   "repository": {
     "comment": {
@@ -16,28 +16,28 @@
       "name": "comment.line.mcnp"
     },
     "keyword": {
-      "match": "\\b(mode|kcode|ksrc|sdef|nps|prdmp|print|phys|imp|fill|lat|u|trcl|like|but)\\b",
+      "match": "\\b(mode|kcode|ksrc|sdef|nps|prdmp|print|phys|imp|fill|lat|u|trcl|like|but|vol|area|tr|ctme|rand|cut|tmp|wwn|wwp|dxt|fmesh)\\b",
       "name": "keyword.control.mcnp"
     },
     "material": {
-      "match": "^m\\d+|^mt\\d+",
-      "name": "entity.name.function.mcnp"
+      "match": "^(m[t]?\\d+)\\b",
+      "name": "entity.name.material.mcnp"
     },
     "tally": {
-      "match": "^f\\d+|^fm\\d+|^fc\\d+|^e\\d+|^de\\d+|^df\\d+",
-      "name": "support.function.mcnp"
+      "match": "^(f[mcst]?\\d+|e\\d+|de\\d+|df\\d+|sd\\d+|tf\\d+)\\b",
+      "name": "support.function.tally.mcnp"
     },
     "surface": {
-      "match": "\\b(cz|cx|cy|pz|px|py|sz|so|rpp|rcc|sph|sq|gq|tz|kz)\\b",
-      "name": "storage.type.mcnp"
-    },
-    "number": {
-      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
-      "name": "constant.numeric.mcnp"
+      "match": "\\b(cz|cx|cy|pz|px|py|sz|so|sx|sy|rpp|rcc|rhp|hex|box|sph|sq|gq|tz|tx|ty|kz|kx|ky|p|c\\/x|c\\/y|c\\/z)\\b",
+      "name": "storage.type.surface.mcnp"
     },
     "zaid": {
-      "match": "\\d{4,6}\\.\\d{2}[cCpPdDyY]",
-      "name": "string.other.zaid.mcnp"
+      "match": "\\b\\d{4,6}\\.\\d{2,3}[cCpPdDyYtThH]\\b",
+      "name": "constant.other.zaid.mcnp"
+    },
+    "number": {
+      "match": "(?<![\\w.])-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.mcnp"
     }
   }
 }

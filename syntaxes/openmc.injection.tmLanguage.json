@@ -1,0 +1,40 @@
+{
+  "scopeName": "openmc.injection",
+  "name": "OpenMC (Python injection)",
+  "injectionSelector": "L:source.python -comment -string",
+  "patterns": [
+    { "include": "#openmc-class" },
+    { "include": "#openmc-func" },
+    { "include": "#openmc-submodule" },
+    { "include": "#openmc-module" }
+  ],
+  "repository": {
+    "openmc-class": {
+      "match": "\\b(openmc)(?:\\.(model|stats|deplete|data|lib|mgxs))?\\.([A-Z]\\w+)\\b",
+      "captures": {
+        "1": { "name": "variable.language.openmc" },
+        "2": { "name": "support.type.openmc" },
+        "3": { "name": "support.class.openmc" }
+      }
+    },
+    "openmc-func": {
+      "match": "\\b(openmc)(?:\\.(model|stats|deplete|data|lib|mgxs))?\\.([a-z]\\w+)(?=\\s*\\()",
+      "captures": {
+        "1": { "name": "variable.language.openmc" },
+        "2": { "name": "support.type.openmc" },
+        "3": { "name": "support.function.openmc" }
+      }
+    },
+    "openmc-submodule": {
+      "match": "\\b(openmc)\\.(model|stats|deplete|data|lib|mgxs)\\b",
+      "captures": {
+        "1": { "name": "variable.language.openmc" },
+        "2": { "name": "support.type.openmc" }
+      }
+    },
+    "openmc-module": {
+      "match": "\\bopenmc\\b",
+      "name": "variable.language.openmc"
+    }
+  }
+}

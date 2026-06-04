@@ -3,42 +3,42 @@
   "name": "Serpent",
   "patterns": [
     { "include": "#comment" },
-    { "include": "#keyword" },
     { "include": "#material" },
     { "include": "#pin" },
-    { "include": "#number" },
+    { "include": "#keyword" },
     { "include": "#string" },
-    { "include": "#zaid" }
+    { "include": "#zaid" },
+    { "include": "#number" }
   ],
   "repository": {
     "comment": {
-      "match": "%.*$",
-      "name": "comment.line.percent.serpent"
+      "match": "%.*$|/\\*[\\s\\S]*?\\*/",
+      "name": "comment.line.serpent"
     },
     "keyword": {
-      "match": "\\b(set|surf|cell|lat|pin|dep|det|ene|mesh|plot|include|therm|mat)\\b",
+      "match": "\\b(set|surf|cell|lat|pin|dep|det|ene|mesh|plot|include|therm|mat|trans|src|branch|coef|fum|dtrans|umsh|solid)\\b",
       "name": "keyword.control.serpent"
     },
     "material": {
-      "match": "^mat\\s+\\w+",
-      "name": "entity.name.function.serpent"
+      "match": "(?<=^mat\\s)\\s*\\w+|(?<=^therm\\s)\\s*\\w+",
+      "name": "entity.name.material.serpent"
     },
     "pin": {
-      "match": "^pin\\s+\\w+",
+      "match": "(?<=^pin\\s)\\s*\\w+|(?<=^surf\\s)\\s*\\w+|(?<=^cell\\s)\\s*\\w+",
       "name": "entity.name.type.serpent"
-    },
-    "number": {
-      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
-      "name": "constant.numeric.serpent"
     },
     "string": {
       "begin": "\"",
       "end": "\"",
-      "name": "string.quoted.double.serpent"
+      "name": "string.quoted.serpent"
     },
     "zaid": {
-      "match": "\\d{4,6}\\.\\d{2}[cC]",
-      "name": "string.other.zaid.serpent"
+      "match": "\\b\\d{4,6}\\.\\d{2,3}[cC]\\b",
+      "name": "constant.other.zaid.serpent"
+    },
+    "number": {
+      "match": "(?<![\\w.])-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.serpent"
     }
   }
 }

@@ -2,7 +2,7 @@
   "name": "owen-neutronics",
   "displayName": "OWEN — Open Workspace for Engineered Neutronics",
   "description": "Nuclear reactor modeling toolkit: syntax highlighting, lattice builder, geometry preview, validation, and workflow automation for MCNP, OpenMC, Serpent, and SCONE.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "belvoirdynamics",
   "license": "SEE LICENSE IN LICENSE",
   "icon": "assets/owen-icon.png",
@@ -51,7 +51,9 @@
     "onCommand:owen.searchReactorLibrary",
     "onCommand:owen.insertMaterial",
     "onCommand:owen.openTutorial",
-    "onCommand:owen.runSweep"
+    "onCommand:owen.runSweep",
+    "onCommand:owen.chooseHighlightPalette",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -107,6 +109,13 @@
         "language": "scone",
         "scopeName": "source.scone",
         "path": "./syntaxes/scone.tmLanguage.json"
+      },
+      {
+        "scopeName": "openmc.injection",
+        "path": "./syntaxes/openmc.injection.tmLanguage.json",
+        "injectTo": [
+          "source.python"
+        ]
       }
     ],
     "commands": [
@@ -148,6 +157,11 @@
       {
         "command": "owen.runSweep",
         "title": "OWEN: Run Parameter Sweep",
+        "category": "OWEN"
+      },
+      {
+        "command": "owen.chooseHighlightPalette",
+        "title": "OWEN: Choose Highlight Palette",
         "category": "OWEN"
       }
     ],
@@ -197,6 +211,10 @@
         {
           "command": "owen.searchReactorLibrary",
           "group": "4_help@2"
+        },
+        {
+          "command": "owen.chooseHighlightPalette",
+          "group": "5_appearance@1"
         }
       ]
     },
@@ -257,6 +275,74 @@
           "type": "string",
           "default": "https://reactormc.net/data",
           "description": "Base URL for live NRDP material/element snapshots (expects nrdp-materials.json and nrdp-elements.json)."
+        },
+        "owen.highlight.mcnp.palette": {
+          "type": "string",
+          "enum": [
+            "Classic",
+            "Solarized",
+            "High Contrast",
+            "Pastel"
+          ],
+          "enumDescriptions": [
+            "VS Code dark default-style colors",
+            "Muted Solarized-inspired accents",
+            "Bright, vivid, maximum legibility",
+            "Soft low-saturation tones"
+          ],
+          "default": "Classic",
+          "description": "Color palette applied to MCNP syntax tokens (comments, keywords, surfaces, materials, tallies, numbers, ZAIDs). Applied live via editor.tokenColorCustomizations."
+        },
+        "owen.highlight.openmc.palette": {
+          "type": "string",
+          "enum": [
+            "Classic",
+            "Solarized",
+            "High Contrast",
+            "Pastel"
+          ],
+          "enumDescriptions": [
+            "VS Code dark default-style colors",
+            "Muted Solarized-inspired accents",
+            "Bright, vivid, maximum legibility",
+            "Soft low-saturation tones"
+          ],
+          "default": "Classic",
+          "description": "Color palette applied to OpenMC API tokens inside Python files (openmc module, classes, functions, submodules) via an injection grammar. Applied live via editor.tokenColorCustomizations."
+        },
+        "owen.highlight.serpent.palette": {
+          "type": "string",
+          "enum": [
+            "Classic",
+            "Solarized",
+            "High Contrast",
+            "Pastel"
+          ],
+          "enumDescriptions": [
+            "VS Code dark default-style colors",
+            "Muted Solarized-inspired accents",
+            "Bright, vivid, maximum legibility",
+            "Soft low-saturation tones"
+          ],
+          "default": "Classic",
+          "description": "Color palette applied to Serpent syntax tokens (comments, keywords, materials, cells/pins/surfaces, numbers, strings, ZAIDs). Applied live via editor.tokenColorCustomizations."
+        },
+        "owen.highlight.scone.palette": {
+          "type": "string",
+          "enum": [
+            "Classic",
+            "Solarized",
+            "High Contrast",
+            "Pastel"
+          ],
+          "enumDescriptions": [
+            "VS Code dark default-style colors",
+            "Muted Solarized-inspired accents",
+            "Bright, vivid, maximum legibility",
+            "Soft low-saturation tones"
+          ],
+          "default": "Classic",
+          "description": "Color palette applied to SCONE syntax tokens (comments, keywords, block/section names, numbers, strings). Applied live via editor.tokenColorCustomizations."
         }
       }
     },

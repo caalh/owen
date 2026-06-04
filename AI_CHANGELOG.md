@@ -12,6 +12,80 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-04 — v0.1.3 — Per-language syntax-highlighting palettes (4×4)
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.2` → `0.1.3` in `package.json`.
+
+### What & why
+
+Goal: let the user pick one of four color palettes *per language* (MCNP, OpenMC, Serpent,
+SCONE = 16 combos) and recolor that language's tokens live.
+
+- **Investigation.** MCNP/Serpent/SCONE already had custom TextMate grammars
+  (`syntaxes/*.tmLanguage.json`) with namespaced scopes, but thin. OpenMC had **no grammar** —
+  it rode on the stock Python grammar, so there was nothing OWEN-specific to color. That
+  confirmed the spec's hypothesis: OpenMC needs an **injection grammar** on `source.python`.
+
+- **Grammars (`syntaxes/`).** Enriched MCNP/Serpent/SCONE and normalized scope names into
+  per-language namespaces so palettes can target precisely:
+  - MCNP: `comment.line.mcnp`, `keyword.control.mcnp`, `entity.name.material.mcnp`,
+    `support.function.tally.mcnp`, `storage.type.surface.mcnp`, `constant.numeric.mcnp`,
+    `constant.other.zaid.mcnp` (added surface types incl. `rhp`/`hex`/`box`/`c/x`, more data
+    keywords, and a `(?<![\w.])` guard on numbers so ZAIDs/material ids aren't half-colored).
+  - Serpent: `comment.line.serpent` (now also `/* */`), `keyword.control.serpent`,
+    `entity.name.material.serpent`, `entity.name.type.serpent` (pin/surf/cell names via
+    lookbehind), `string.quoted.serpent`, `constant.numeric.serpent`,
+    `constant.other.zaid.serpent`.
+  - SCONE: `comment.line.scone` (now also `!`), `keyword.control.scone`,
+    `entity.name.section.scone` (block name before `{`), `string.quoted.scone`,
+    `constant.numeric.scone`.
+  - **New** `syntaxes/openmc.injection.tmLanguage.json` (scopeName `openmc.injection`,
+    `injectionSelector: "L:source.python -comment -string"`, registered in
+    `contributes.grammars` with `injectTo: ["source.python"]`). Scopes
+    `variable.language.openmc` (the `openmc` name), `support.class.openmc` (`openmc.Foo`),
+    `support.function.openmc` (`openmc.foo(`), `support.type.openmc`
+    (`openmc.model`/`stats`/`deplete`/`data`/`lib`/`mgxs`). Deliberately does **not** scope
+    generic numbers/strings, which would recolor the whole Python file.
+
+- **Palettes (`src/highlight/palettes.ts`).** Role-based to avoid duplication: 8 roles
+  (comment, keyword, type, entity, func, number, string, special) × 4 palettes (`classic`,
+  `solarized`, `highContrast`, `pastel`), plus a `SCOPE_ROLES` map (language → scope → role)
+  matching exactly what the grammars emit. `buildRules(language, paletteId)` produces one
+  `{ scope, settings }` rule per scope (scope kept as a plain string). `MANAGED_SCOPES` is the
+  union of all scopes — the single source of truth for "is this rule OWEN's?". User-facing
+  enum values are the labels (`Classic`/`Solarized`/`High Contrast`/`Pastel`);
+  `paletteIdFromLabel` normalizes back to ids. Comments are italic in every palette.
+
+- **Apply + command (`src/highlight/index.ts`).** `applyPalettes()` reads the four
+  `owen.highlight.<lang>.palette` settings, `editor.inspect('tokenColorCustomizations')`'s
+  **globalValue**, drops existing rules whose `scope ∈ MANAGED_SCOPES`, appends freshly-built
+  OWEN rules for all four languages, and writes back to `ConfigurationTarget.Global` — but only
+  if `JSON.stringify` differs (prevents churn and config-change loops). Everything else in the
+  object (other extensions' rules, the user's own, `"[Theme Name]"` blocks) is preserved via
+  spread. `registerHighlightPalettes(context)` registers the `owen.chooseHighlightPalette`
+  QuickPick command (language → palette, current palette marked with `$(check)`), an
+  `onDidChangeConfiguration` listener gated on `affectsConfiguration('owen.highlight')`, and
+  applies once on activation. Wired first-ish in `activate()` after snippet completions.
+
+- **`package.json`.** Version `0.1.3`; added `onCommand:owen.chooseHighlightPalette` +
+  `onStartupFinished` activation events; OpenMC injection grammar entry; the new command + its
+  `owen.contextMenu` submenu entry (`5_appearance@1`); four `owen.highlight.*.palette` enum
+  settings with `enumDescriptions` and default `Classic`.
+
+### Verified
+
+- `npx tsc --noEmit` clean; `node esbuild.js` clean; rebuilt `out/extension.js` contains
+  `chooseHighlightPalette` / `applyPalettes` / `tokenColorCustomizations`. All five JSON files
+  parse. `npx vsce package` → `owen-neutronics-0.1.3.vsix`; `npx vsce ls` confirms the four
+  grammars (incl. the OpenMC injection grammar) ship.
+- **Not** verified: actual on-screen colors. Confirming the palettes visually requires the
+  Extension Development Host (or an installed VSIX) and a human eye.
+
+### Still required for installed users to get this
+- `vsce`/`ovsx` republish (needs the user's tokens) and the `caalh/owen` mirror sync + release.
+
 ## 2026-06-04 — v0.1.2 — Snippet completion provider + right-click context menu
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

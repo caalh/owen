@@ -5,6 +5,39 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] — 2026-06-04
+
+Per-language syntax-highlighting color palettes, plus richer grammars to make them meaningful.
+
+### Added
+
+- **Selectable highlight palettes — 4 per language (16 total).** Each of MCNP, OpenMC,
+  Serpent, and SCONE can be independently recolored with one of four palettes: **Classic**
+  (VS Code dark default-style), **Solarized** (muted Solarized-inspired), **High Contrast**
+  (bright/vivid), and **Pastel** (soft, low-saturation). Pick via the new settings
+  `owen.highlight.mcnp.palette`, `owen.highlight.openmc.palette`,
+  `owen.highlight.serpent.palette`, `owen.highlight.scone.palette`, or via the command
+  **OWEN: Choose Highlight Palette** (also in the editor right-click **OWEN** submenu), which
+  walks you through language → palette in a QuickPick.
+- **Live recoloring.** OWEN applies the chosen palette by writing scoped
+  `editor.tokenColorCustomizations` `textMateRules` that target only OWEN's namespaced scopes,
+  re-applying immediately whenever an `owen.highlight.*` setting changes. It merges with — and
+  never clobbers — your existing token-color customizations, other extensions' rules, or
+  theme-scoped blocks, so palettes compose with your active theme.
+- **OpenMC injection grammar.** OpenMC files are Python (`.py` with `import openmc`), so there
+  was previously no OWEN-specific coloring. A new `openmc.injection` grammar injected into
+  `source.python` scopes the `openmc` module, its classes (`support.class.openmc`), functions
+  (`support.function.openmc`), and submodules like `openmc.model`/`openmc.stats`
+  (`support.type.openmc`) — leaving the rest of your Python untouched.
+
+### Changed
+
+- **Richer MCNP / Serpent / SCONE grammars.** Scopes were expanded and renamed into clean,
+  per-language namespaces (e.g. `entity.name.material.mcnp`, `storage.type.surface.mcnp`,
+  `constant.other.zaid.mcnp`, `entity.name.type.serpent`, `entity.name.section.scone`) so the
+  palettes have distinct token classes to target. Added more keywords/surface types, block-C
+  comments for Serpent, and `!`-style comments for SCONE.
+
 ## [0.1.2] — 2026-06-04
 
 Follow-up release: the OpenMC snippets still did not surface after the 0.1.1 underscore

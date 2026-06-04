@@ -3,32 +3,32 @@
   "name": "SCONE",
   "patterns": [
     { "include": "#comment" },
-    { "include": "#keyword" },
     { "include": "#block" },
-    { "include": "#number" },
-    { "include": "#string" }
+    { "include": "#keyword" },
+    { "include": "#string" },
+    { "include": "#number" }
   ],
   "repository": {
     "comment": {
-      "match": "//.*$",
-      "name": "comment.line.double-slash.scone"
+      "match": "//.*$|!.*$",
+      "name": "comment.line.scone"
     },
     "keyword": {
-      "match": "\\b(type|id|origin|halfwidth|boundary|radii|fills|filltype|surfaces|cells|universes|geometry|nuclearData|materials|composition|temp|pop|active|inactive|XSdata|dataType)\\b",
+      "match": "\\b(type|id|origin|halfwidth|boundary|radii|fills|filltype|surfaces|cells|universes|geometry|nuclearData|materials|composition|temp|pop|active|inactive|XSdata|dataType|aceNeutronDatabase|collisionOperator|transportOperator|source|tally|map|response|handles|graph)\\b",
       "name": "keyword.control.scone"
     },
     "block": {
-      "match": "\\b\\w+\\s*\\{",
+      "match": "\\b(\\w+)\\s*(?=\\{)",
       "name": "entity.name.section.scone"
-    },
-    "number": {
-      "match": "\\b-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
-      "name": "constant.numeric.scone"
     },
     "string": {
       "begin": "\"",
       "end": "\"",
-      "name": "string.quoted.double.scone"
+      "name": "string.quoted.scone"
+    },
+    "number": {
+      "match": "(?<![\\w.])-?\\d+\\.?\\d*([eE][+-]?\\d+)?\\b",
+      "name": "constant.numeric.scone"
     }
   }
 }

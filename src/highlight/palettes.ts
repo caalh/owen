@@ -1,0 +1,184 @@
+// OWEN per-language syntax-highlighting palettes.
+//
+// For each of the four languages OWEN supports, the user can pick one of four
+// palettes. A palette is a mapping from a *role* (comment, keyword, number, …)
+// to a color + optional font style. Each language declares which TextMate
+// scopes (emitted by the grammars under ../../syntaxes/) map to which role, so
+// the same four palettes recolor every language consistently while still
+// targeting that language's namespaced scopes precisely.
+
+export type Language = 'mcnp' | 'openmc' | 'serpent' | 'scone';
+export type PaletteId = 'classic' | 'solarized' | 'highContrast' | 'pastel';
+
+/** A semantic token role shared across all languages. */
+export type Role =
+    | 'comment'
+    | 'keyword'
+    | 'type'
+    | 'entity'
+    | 'func'
+    | 'number'
+    | 'string'
+    | 'special';
+
+export interface TokenStyle {
+    foreground: string;
+    fontStyle?: string;
+}
+
+export const LANGUAGES: Language[] = ['mcnp', 'openmc', 'serpent', 'scone'];
+
+export const LANGUAGE_LABELS: Record<Language, string> = {
+    mcnp: 'MCNP',
+    openmc: 'OpenMC',
+    serpent: 'Serpent',
+    scone: 'SCONE',
+};
+
+/** Ordered for the QuickPick / settings enum. */
+export const PALETTE_IDS: PaletteId[] = ['classic', 'solarized', 'highContrast', 'pastel'];
+
+export const PALETTE_LABELS: Record<PaletteId, string> = {
+    classic: 'Classic',
+    solarized: 'Solarized',
+    highContrast: 'High Contrast',
+    pastel: 'Pastel',
+};
+
+export const PALETTE_DESCRIPTIONS: Record<PaletteId, string> = {
+    classic: 'VS Code dark default-style colors',
+    solarized: 'Muted Solarized-inspired accents',
+    highContrast: 'Bright, vivid, maximum legibility',
+    pastel: 'Soft low-saturation tones',
+};
+
+/** Map a user-facing label (settings enum value) back to its palette id. */
+export function paletteIdFromLabel(label: string | undefined): PaletteId {
+    if (!label) return 'classic';
+    const found = PALETTE_IDS.find((id) => PALETTE_LABELS[id].toLowerCase() === label.toLowerCase());
+    return found ?? 'classic';
+}
+
+// Role colors for each palette. Comments are italicized in every palette.
+const ROLE_COLORS: Record<PaletteId, Record<Role, TokenStyle>> = {
+    classic: {
+        comment: { foreground: '#6A9955', fontStyle: 'italic' },
+        keyword: { foreground: '#569CD6' },
+        type: { foreground: '#4EC9B0' },
+        entity: { foreground: '#DCDCAA' },
+        func: { foreground: '#C586C0' },
+        number: { foreground: '#B5CEA8' },
+        string: { foreground: '#CE9178' },
+        special: { foreground: '#D7BA7D' },
+    },
+    solarized: {
+        comment: { foreground: '#657B83', fontStyle: 'italic' },
+        keyword: { foreground: '#859900' },
+        type: { foreground: '#B58900' },
+        entity: { foreground: '#268BD2' },
+        func: { foreground: '#6C71C4' },
+        number: { foreground: '#2AA198' },
+        string: { foreground: '#CB4B16' },
+        special: { foreground: '#D33682' },
+    },
+    highContrast: {
+        comment: { foreground: '#7CA668', fontStyle: 'italic' },
+        keyword: { foreground: '#00B0FF' },
+        type: { foreground: '#00E5C0' },
+        entity: { foreground: '#FFD700' },
+        func: { foreground: '#FF6EC7' },
+        number: { foreground: '#B5FF6B' },
+        string: { foreground: '#FF9E64' },
+        special: { foreground: '#FFE65C' },
+    },
+    pastel: {
+        comment: { foreground: '#A8B7AB', fontStyle: 'italic' },
+        keyword: { foreground: '#8AB4D8' },
+        type: { foreground: '#9DD6C4' },
+        entity: { foreground: '#E6D6A8' },
+        func: { foreground: '#D2A8D8' },
+        number: { foreground: '#BFD9A8' },
+        string: { foreground: '#E0B0A0' },
+        special: { foreground: '#D8C49A' },
+    },
+};
+
+// Each language's TextMate scopes mapped to a shared role. These scope names
+// MUST match what the grammars emit (syntaxes/*.tmLanguage.json).
+const SCOPE_ROLES: Record<Language, Record<string, Role>> = {
+    mcnp: {
+        'comment.line.mcnp': 'comment',
+        'keyword.control.mcnp': 'keyword',
+        'entity.name.material.mcnp': 'entity',
+        'support.function.tally.mcnp': 'func',
+        'storage.type.surface.mcnp': 'type',
+        'constant.numeric.mcnp': 'number',
+        'constant.other.zaid.mcnp': 'special',
+    },
+    openmc: {
+        'variable.language.openmc': 'keyword',
+        'support.class.openmc': 'type',
+        'support.function.openmc': 'func',
+        'support.type.openmc': 'entity',
+    },
+    serpent: {
+        'comment.line.serpent': 'comment',
+        'keyword.control.serpent': 'keyword',
+        'entity.name.material.serpent': 'entity',
+        'entity.name.type.serpent': 'type',
+        'constant.numeric.serpent': 'number',
+        'string.quoted.serpent': 'string',
+        'constant.other.zaid.serpent': 'special',
+    },
+    scone: {
+        'comment.line.scone': 'comment',
+        'keyword.control.scone': 'keyword',
+        'entity.name.section.scone': 'type',
+        'constant.numeric.scone': 'number',
+        'string.quoted.scone': 'string',
+    },
+};
+
+/** Every TextMate scope OWEN manages, across all languages. */
+export const MANAGED_SCOPES: ReadonlySet<string> = new Set(
+    LANGUAGES.flatMap((lang) => Object.keys(SCOPE_ROLES[lang])),
+);
+
+export interface TextMateRule {
+    scope: string;
+    settings: TokenStyle;
+}
+
+/**
+ * Build the `editor.tokenColorCustomizations.textMateRules` entries for one
+ * language under the given palette. One rule per scope (scope kept as a plain
+ * string) so OWEN-managed rules are trivially identifiable via MANAGED_SCOPES.
+ */
+export function buildRules(language: Language, palette: PaletteId): TextMateRule[] {
+    const roleColors = ROLE_COLORS[palette];
+    const scopeRoles = SCOPE_ROLES[language];
+    return Object.entries(scopeRoles).map(([scope, role]) => {
+        const style = roleColors[role];
+        const settings: TokenStyle = { foreground: style.foreground };
+        if (style.fontStyle) settings.fontStyle = style.fontStyle;
+        return { scope, settings };
+    });
+}
+
+/**
+ * Full language → palette → scope → color map, exposed for documentation /
+ * testing. Keyed exactly as described in the feature spec.
+ */
+export function fullPaletteMap(): Record<Language, Record<PaletteId, Record<string, TokenStyle>>> {
+    const out = {} as Record<Language, Record<PaletteId, Record<string, TokenStyle>>>;
+    for (const lang of LANGUAGES) {
+        out[lang] = {} as Record<PaletteId, Record<string, TokenStyle>>;
+        for (const id of PALETTE_IDS) {
+            out[lang][id] = {};
+            for (const rule of buildRules(lang, id)) {
+                out[lang][id][rule.scope] = rule.settings;
+            }
+        }
+    }
+    return out;
+}
