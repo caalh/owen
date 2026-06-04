@@ -12,6 +12,58 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-04 — v0.1.4 — Snippets auto-surface while typing (trigger chars + preselect)
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.3` → `0.1.4` in `package.json` and `package-lock.json`.
+
+### What & why
+
+Reported symptom: after 0.1.2 added the `CompletionItemProvider`, the `omc_*` snippets
+appeared on **Ctrl+Space** but **not automatically while typing** `omc_` — Pylance's
+as-you-type / inline suggestion occupied the slot, so users only saw OWEN items on a manual
+trigger.
+
+- **Ruled out** the runtime-path / bundling / registration hypotheses: the user confirmed
+  Ctrl+Space *does* list the OWEN snippets, so the provider loads the JSON
+  (`fs.readFileSync(path.join(context.extensionPath, 'snippets', file))` — `extensionPath` is
+  the VSIX root, and `.vscodeignore` does not exclude `snippets/`, so the read succeeds) and is
+  registered correctly. The defect was purely **as-you-type surfacing**, not loading.
+
+- **Fix (`src/completions/snippets.ts`).**
+  - **Trigger characters.** `registerCompletionItemProvider` is now called with the lowercase
+    alphabet + `_` as trigger characters, so the suggestion widget opens/refreshes on each
+    prefix keystroke instead of relying on the user pressing Ctrl+Space.
+  - **Replacement range.** `provideCompletionItems` computes the identifier word under the
+    cursor (`getWordRangeAtPosition(position, /[A-Za-z_][A-Za-z0-9_]*/)`) and assigns it to each
+    item's `range`, so `omc_` filters to and is replaced by the snippet body.
+  - **Preselect.** The first item whose `filterText` starts with the typed text gets
+    `preselect = true`, highlighting the best OWEN match ahead of language-server items.
+  - **sortText** unchanged (`0_owen_<prefix>`) — still biases OWEN items to the top.
+  - **Output channel.** Added a guarded one-time log to a new `OWEN` output channel reporting
+    the count of snippets loaded (and a line per file that loads none), so future "snippets
+    don't show" reports are easy to triage. No per-keystroke logging.
+  - The Python gate (`detectMonteCarloLanguage`) is unchanged and already tolerant of
+    `import openmc`, `import openmc as …`, and `from openmc import …` (regex
+    `OPENMC_IMPORT_RE` in `src/util/detectLanguage.ts`).
+
+- **Did not** force any editor settings. `CHANGELOG.md` documents the optional
+  `editor.snippetSuggestions: "top"` tip instead of writing it on the user's behalf.
+
+### Verified
+
+- `npx tsc --noEmit` clean; `node esbuild.js` clean. The bundle `out/extension.js` inlines the
+  provider (grep for `registerCompletionItemProvider` / `0_owen_`); snippet JSON is still read
+  at runtime from the VSIX root (already proven to work via the user's Ctrl+Space confirmation).
+- `npx vsce package` → `owen-neutronics-0.1.4.vsix`; `npx vsce ls` confirms the four snippet
+  JSON files ship.
+- **Not** verified: the auto-popup-while-typing behavior on screen — that needs the user to
+  install 0.1.4 and type `omc_` in a Python file that imports openmc.
+
+### Still required for installed users to get this
+- `vsce`/`ovsx` republish (needs the user's tokens) and the `caalh/owen` mirror sync + release.
+
 ## 2026-06-04 — v0.1.3 — Per-language syntax-highlighting palettes (4×4)
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

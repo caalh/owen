@@ -10,8 +10,10 @@ import { detectMonteCarloLanguage } from '../util/detectLanguage';
  * Python files they are routinely out-ranked or suppressed by the Python language
  * server's own completions — so the `omc_*` prefixes appear unreliable to users even
  * though the JSON ships in the VSIX. Registering an explicit provider guarantees the
- * snippets show on Ctrl+Space and as the user types the prefix, independent of
- * `editor.snippetSuggestions` / `editor.quickSuggestions` and language-server ranking.
+ * snippets show on Ctrl+Space and, crucially, auto-surface in the widget *as the user
+ * types the prefix*: trigger characters re-open/refresh the widget on each prefix char,
+ * `sortText` ranks OWEN items at the top, and `preselect` highlights the best match so
+ * they are not buried under language-server completions (e.g. Pylance).
  *
  * The snippet JSON files remain the single source of truth: they are loaded at runtime
  * and mapped to `CompletionItem`s of kind `Snippet`.
@@ -31,6 +33,20 @@ const SNIPPET_SOURCES: { file: string; languages: string[] }[] = [
     { file: 'serpent.json', languages: ['serpent'] },
     { file: 'scone.json', languages: ['scone'] },
 ];
+
+/**
+ * Characters that re-trigger the suggestion widget while typing a prefix. Snippet
+ * prefixes are identifier-like words (`omc_pin`, `mcnp_cell`, …), so completing on the
+ * lowercase alphabet plus `_` means the widget opens/refreshes on every prefix keystroke
+ * — not just on Ctrl+Space.
+ */
+const TRIGGER_CHARACTERS: string[] = [
+    ...'abcdefghijklmnopqrstuvwxyz'.split(''),
+    '_',
+];
+
+/** Matches the identifier-with-underscores word under the cursor (the prefix being typed). */
+const PREFIX_WORD_RE = /[A-Za-z_][A-Za-z0-9_]*/;
 
 function asLines(value: string | string[]): string {
     return Array.isArray(value) ? value.join('\n') : value;
@@ -61,7 +77,8 @@ function loadSnippetFile(extensionPath: string, file: string): vscode.Completion
             item.documentation = new vscode.MarkdownString(
                 `${snippet.description ?? name}\n\n\`\`\`\n${bodyText}\n\`\`\``,
             );
-            // Sort OWEN snippets ahead of generic word-based completions.
+            // Bias OWEN snippets to the very top of the widget, ahead of language-server
+            // and word-based completions (whose sortText typically starts with a letter).
             item.sortText = `0_owen_${prefix}`;
             items.push(item);
         }
@@ -71,29 +88,59 @@ function loadSnippetFile(extensionPath: string, file: string): vscode.Completion
 
 export function registerSnippetCompletions(context: vscode.ExtensionContext): vscode.Disposable {
     const disposables: vscode.Disposable[] = [];
+    const output = vscode.window.createOutputChannel('OWEN');
+    disposables.push(output);
+
+    let totalLoaded = 0;
 
     for (const { file, languages } of SNIPPET_SOURCES) {
         const items = loadSnippetFile(context.extensionPath, file);
         if (items.length === 0) {
+            output.appendLine(`OWEN: no snippets loaded from ${file}.`);
             continue;
         }
+        totalLoaded += items.length;
 
         for (const language of languages) {
             const provider: vscode.CompletionItemProvider = {
-                provideCompletionItems(document) {
+                provideCompletionItems(document, position) {
                     // For Python, only offer OWEN snippets when the file is actually an
                     // OpenMC model (contains `import openmc`); MC languages are always on.
                     if (language === 'python' && detectMonteCarloLanguage(document) !== 'openmc') {
                         return undefined;
                     }
+
+                    // Replace the identifier word under the cursor so `omc_` filters to and
+                    // is replaced by the snippet (rather than appending after it).
+                    const wordRange = document.getWordRangeAtPosition(position, PREFIX_WORD_RE);
+                    const typed = wordRange ? document.getText(wordRange) : '';
+
+                    let preselected = false;
+                    for (const item of items) {
+                        item.range = wordRange;
+                        // Preselect the first item whose prefix the user has started typing,
+                        // so the best OWEN match is highlighted ahead of Pylance items.
+                        const isMatch =
+                            typed.length > 0 && item.filterText?.startsWith(typed) === true;
+                        item.preselect = isMatch && !preselected;
+                        if (item.preselect) {
+                            preselected = true;
+                        }
+                    }
                     return items;
                 },
             };
             disposables.push(
-                vscode.languages.registerCompletionItemProvider({ language }, provider),
+                vscode.languages.registerCompletionItemProvider(
+                    { language },
+                    provider,
+                    ...TRIGGER_CHARACTERS,
+                ),
             );
         }
     }
+
+    output.appendLine(`OWEN: snippet completion provider ready (${totalLoaded} snippets loaded).`);
 
     const combined = vscode.Disposable.from(...disposables);
     context.subscriptions.push(combined);

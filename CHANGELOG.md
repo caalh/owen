@@ -5,6 +5,27 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] — 2026-06-04
+
+The OpenMC snippets now pop up **automatically as you type** the prefix — no Ctrl+Space needed.
+
+### Fixed
+
+- **`omc_*` snippets auto-surface while typing.** As of 0.1.2 the snippets showed on
+  **Ctrl+Space**, but typing `omc_` in a Python file did not open the suggestion widget with
+  them — Pylance's as-you-type / inline suggestion took the slot, so the OWEN items only
+  appeared on a manual trigger. The completion provider is now registered with
+  **trigger characters** (the lowercase alphabet plus `_`) so the widget opens/refreshes on
+  each prefix keystroke; each item carries the correct replacement **range** so `omc_` filters
+  to (and is replaced by) the snippet; OWEN items keep a top-biased **`sortText`**; and the
+  best matching prefix is **preselected** so it is highlighted ahead of language-server
+  completions. Applies to MCNP, Serpent, and SCONE prefixes too. The Python provider still
+  only fires in files that import OpenMC (`import openmc`, `import openmc as …`, or
+  `from openmc import …`).
+
+> Tip: if you still prefer snippets pinned above everything else, set
+> `"editor.snippetSuggestions": "top"`. OWEN does not change your editor settings.
+
 ## [0.1.3] — 2026-06-04
 
 Per-language syntax-highlighting color palettes, plus richer grammars to make them meaningful.
