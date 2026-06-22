@@ -12,6 +12,96 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-22 — v0.1.7 — 3D geometry preview overhaul: real lattice/universe parsing, layer toggles, instancing
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.6` → `0.1.7` in `package.json` and `package-lock.json`. This replaces the
+shallow name-pattern geometry heuristic with a real per-code parser architecture feeding a
+shared geometry IR, fixes the "17×17 renders as a single pin" and "can't render a SCONE core"
+bugs, and rebuilds the webview around instanced rendering with layer/material toggles.
+
+### Root cause of the single-pin / no-core bugs
+
+- **OpenMC single pin** — the old wired path (`extractor.ts` `extractOpenmcCylinders`, the
+  v0.1.0 port) only built a lattice when it found literal `guide_tube_coords` /
+  `guide_positions` names (lines ~258–283). Any normal 17×17 deck — literal nested list,
+  symbol grid, or the dominant `np.full(...)` + assignment idiom — has neither, so `latticeSize`
+  stayed `null` and it returned a single 2-layer pin.
+- **SCONE no core** — the wired SCONE path capped at `MAX_CYLINDERS = 15000` and, more
+  importantly, the webview created **one `THREE.Mesh` per cylinder**; a ~55k-pin core is
+  ~55k draw calls, which hangs the view. The newer `src/preview/codes/scone.ts` scaffolding
+  was never wired into `extractor.ts`.
+
+### Architecture
+
+- **`src/preview/types.ts`** — canonical geometry IR. `CylinderSpec` gains `material` and an
+  optional `shape: 'cylinder' | 'box'`. New `ParseResult` ({cylinders, warnings, notes}),
+  `GeometryScene` (adds component/material legend summaries + `primitiveCount`), and
+  `ComponentSummary` / `MaterialSummary`.
+- **`src/preview/palette.ts`** — `emitLayers()` now also accepts per-layer material names so
+  cylinders carry their raw material (drives the material-toggle group).
+- **`src/preview/extractor.ts`** — reduced to a dispatcher. `extractCylinders(text, lang)`
+  (back-compat, used by tests) returns the flat list; new `buildScene(text, lang)` wraps the
+  per-code `ParseResult` with `summarizeComponents()` / `summarizeMaterials()` (first-seen
+  color, fuel→…→vessel ordering) for the webview legend.
+- Per-code parsers each export `parseX(text): ParseResult` (+ a thin `extractXCylinders`):
+  `codes/scone.ts`, `codes/openmc.ts`, `codes/serpent.ts`, and new **`codes/mcnp.ts`**.
+
+### Per-code capability after this pass
+
+- **SCONE (`codes/scone.ts`)** — brace-aware leaf-block walk → classify pin/lat/cell/surface;
+  `resolveToPin()` resolves `cellUniverse` shells to a representative pin by majority vote,
+  **preferring pins that have geometry** (so a mostly-water axial stack with one fuel segment
+  resolves to fuel). Core lattice = largest pitch; recursively places assemblies → pins.
+  `> FULL_LAYER_LIMIT (4000)` pins ⇒ **disc mode** (one full-height disc per pin, colored by
+  material, component from pin name so guide/instrument/absorber are tagged correctly);
+  otherwise **layer mode** (concentric shells). Vessel/barrel from `zCylinder`/`zTruncCylinder`
+  surfaces. `MAX_CYLINDERS = 200000`. **Verified on the real BEAVRS full-core fixture:** 55,784
+  primitives in ~100 ms; components fuel 50,952 / guide_tube 3,380 / instrument_tube **193**
+  (= one per assembly, a good sanity check) / absorber 1,252 / vessel 7; x-extent ±160.6 cm.
+- **OpenMC (`codes/openmc.ts`)** — `findLatticeGrid()` (literal nested lists + quoted symbol
+  grids) **plus new `buildNumpyGrid()`**: parses `arr = np.full((R,C), base)` then applies
+  element assignments (`arr[i,j]=X`, `arr[i][j]=X`) and coordinate-list loops
+  (`for (i,j) in [(r,c),…]: arr[i,j]=X`). Radii recovered from `ZCylinder(r=…)` + scalar
+  assignments grouped into fuel/guide/instrument templates. If a lattice is declared but can't
+  be expanded, emits a **warning** instead of a silent single pin.
+- **Serpent (`codes/serpent.ts`)** — `pin` blocks + first `lat` card → full pin lattice with
+  per-layer material/component. `surf`/`cell` CSG and nested lattices not expanded (warned).
+- **MCNP (`codes/mcnp.ts`)** — z-axis cylinders `cz` and offset `c/z x y r`, `pz` axial bounds,
+  concentric stacks tagged fuel→gap→clad→moderator. `lat`/`fill` lattices and non-z-axis
+  cylinders are **reported, not silently dropped**.
+
+### Webview (`src/preview/webview.ts`)
+
+- Full rebuild around **`THREE.InstancedMesh`**, grouped by geometry signature
+  (`shape|solid|radius|height|opacityBucket|segments`); per-instance color via `setColorAt`.
+  Solid = innermost/opaque pins (capped cylinders); translucent open tubes = outer shells &
+  vessel. ~50k pins ⇒ a few dozen instanced draw calls.
+- **Layer panel:** component checkboxes (with swatch + count) and a collapsible material list,
+  All/None; visibility is applied per-instance (matrix → zero-scale when hidden) so component
+  **and** material filters compose. Plus a global shell-opacity slider and **X/Y clipping
+  planes** (`renderer.localClippingEnabled`) to slice into the core.
+- Warnings/notes are surfaced in-panel and as an empty-state overlay (no more silent single
+  pin). The `{type:'ready'}` handshake is preserved; payload message is now `{type:'scene'}`.
+
+### Tests
+
+- `src/test/suite/extractor.test.ts` — added lattice-expansion tests: OpenMC numpy 17×17
+  (asserts ≥200 cylinders, ≥17 columns, guide tubes present), OpenMC literal nested list,
+  unexpandable-lattice **warning**, nested SCONE core (2×2 of 2×2 ⇒ 32 pin cylinders, 4
+  columns, vessel shell), and `buildScene` legend. **All 10 extractor tests pass headless via
+  mocha** (the extractor has no `vscode` import). The full `npm test` (validator/sweep/line
+  guard) still runs under `@vscode/test-electron`, which may need a local run.
+
+### Verification
+
+- `npx tsc --noEmit` clean; `node esbuild.js` clean. Visual confirmation requires the user in
+  the Extension Dev Host / installed VSIX (open the BEAVRS fixture → **OWEN: Open 3D Geometry
+  Preview** → toggle layers / slice).
+- Note: on the dev machine the `npx esbuild` **CLI** hangs (unrelated to the bundle); the
+  esbuild **JS API** (`node esbuild.js`) works fine and is what the build scripts use.
+
 ## 2026-06-22 — v0.1.6 — Invisible-char toggle, MCNP line guard, editor-title menu, clickable palettes, sweep tests
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

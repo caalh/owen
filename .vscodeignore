@@ -10,7 +10,8 @@ esbuild.js
 tsconfig.json
 **/*.ts
 **/*.map
-out/test/**
+out/**
+!out/extension.js
 owen-*.vsix
 .vsixmanifest
 assets/belvoirdynamics-b.png

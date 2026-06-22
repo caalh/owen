@@ -5,6 +5,49 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] — 2026-06-22
+
+A ground-up rebuild of the **3D geometry preview**: it now parses real lattices and universe
+hierarchies instead of guessing from a few variable names, so full assemblies and full cores
+render — and you can peel them apart layer by layer.
+
+### Added
+
+- **Real lattice & universe parsing for all four codes.** The preview now expands lattice maps
+  and resolves universe hierarchies rather than falling back to a single default pin:
+  - **SCONE** — full dictionary parser: resolves `rootUniverse` → `cellUniverse` →
+    `latUniverse` → `pinUniverse`, expands nested lattices (a core lattice of assembly
+    lattices of pins), turns `pinUniverse` `radii`/`fills` into concentric shells, and draws
+    vessel/barrel surfaces as faint shells. A real **full-core BEAVRS** deck (193 assemblies,
+    ~55,800 pins) renders as a complete core.
+  - **OpenMC** — expands literal nested-list lattices, symbol-grid + `universe_map` dicts, and
+    **NumPy-built** maps (`np.full((17,17), F)` + `arr[i,j] = G` element/loop assignments) —
+    the common style that previously rendered as one pin.
+  - **Serpent** — `pin` blocks + the first `lat` card expand to a full pin lattice.
+  - **MCNP** — z-axis cylinders (`cz`, `c/z x y r`) with `pz` axial bounds.
+- **Layer / component toggles.** A side panel lets you show/hide geometry by **component**
+  (fuel, gap, clad, moderator/coolant, guide tubes, instrument tubes, absorber/burnable
+  poison, structure, vessel) and by **material**, each with a color swatch and count, plus
+  **All/None** buttons — so you can strip away the outer pins to inspect inner structure.
+- **Slice planes + opacity.** X and Y clipping sliders cut through the model to reveal the
+  interior, and a shell-opacity slider fades the translucent layers.
+- **Honest fallbacks.** When a deck can't be fully expanded (e.g. an OpenMC lattice built by a
+  function OWEN can't execute), the panel says **why** instead of silently drawing one pin.
+
+### Changed
+
+- **Performance: instanced rendering.** Geometry is drawn with three.js `InstancedMesh`
+  grouped by shape, so a ~50k-pin core stays interactive (a handful of draw calls instead of
+  tens of thousands of meshes). The webview ready-handshake is preserved so geometry is never
+  dropped on first open.
+
+### Known limitations
+
+- Full-core SCONE renders each pin as a single material-colored disc (toggle a single
+  assembly to see concentric pin layers). MCNP `lat`/`fill` universe lattices are not yet
+  expanded (reported, not silently dropped); non-z-axis MCNP cylinders are skipped. Hex
+  lattices are laid out on a rectangular approximation.
+
 ## [0.1.6] — 2026-06-22
 
 Catch invisible whitespace bugs, stay inside MCNP's column limit, reach OWEN from the editor
