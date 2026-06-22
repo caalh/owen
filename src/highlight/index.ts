@@ -12,7 +12,7 @@ import {
     buildRules,
     paletteIdFromLabel,
 } from './palettes';
-import { showPalettePreview, postHighlight } from './previewPanel';
+import { showPalettePreview, postHighlight, postSelected } from './previewPanel';
 
 // Shape of editor.tokenColorCustomizations we care about. The object may also
 // carry theme-scoped keys ("[Theme Name]": {...}) and other token settings; we
@@ -148,13 +148,17 @@ async function chooseHighlightPalette(context: vscode.ExtensionContext): Promise
     const currentId = readSelection(owenCfg, language);
 
     // Open the side-by-side preview of all four palettes for this language so the
-    // user can compare before choosing.
-    showPalettePreview(context, language);
+    // user can compare before choosing. Clicking a card applies it directly
+    // (in addition to the Quick Pick flow below).
+    showPalettePreview(context, language, currentId, (palette) => {
+        void applySelection(language, palette).then(() => postSelected(palette));
+    });
 
     const chosen = await pickPaletteWithPreview(language, currentId);
     if (!chosen) return;
 
     await applySelection(language, chosen);
+    postSelected(chosen);
 }
 
 /**

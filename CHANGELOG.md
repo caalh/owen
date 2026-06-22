@@ -5,6 +5,44 @@ All notable changes to the OWEN VS Code extension are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] — 2026-06-22
+
+Catch invisible whitespace bugs, stay inside MCNP's column limit, reach OWEN from the editor
+title bar, and apply a highlight palette with one click.
+
+### Added
+
+- **OWEN: Toggle Invisible Characters.** A new command (Command Palette, the right-click
+  **OWEN** submenu, and the editor title-bar menu) flips VS Code's whitespace and
+  control-character rendering on/off so you can see spaces, tabs, `¶`, and stray control
+  characters — the kind of invisible difference that silently breaks column-sensitive MCNP
+  decks. Toggling off restores your previous `editor.renderWhitespace` /
+  `editor.renderControlCharacters` values exactly (including "no explicit value").
+- **MCNP card-image line-length guard.** MCNP files now show a vertical ruler at the column
+  limit, and any line that runs past it is flagged in the **Problems** panel and with an
+  in-editor highlight on the overflowing tail — because characters past the limit are silently
+  ignored by MCNP, a classic invisible bug. The limit defaults to the classic **80** columns
+  and is configurable via **`owen.mcnp.lineLengthLimit`** (set it to `128` for MCNP6.2+). Tab
+  expansion is accounted for, so an apparently-short line with a tab is still caught.
+- **OWEN in the editor title bar.** A compact **OWEN** menu (beaker icon) now appears at the
+  top-right of the editor when you're in an MCNP, Serpent, SCONE, or OpenMC-Python file,
+  exposing Validate, Insert Material, Lattice Builder, 3D Preview, Run, Run Sweep, Toggle
+  Invisibles, Choose Palette, Tutorial, and Library — the same actions as the right-click
+  submenu, one click away.
+- **Click-to-apply highlight palettes.** In the palette preview panel
+  (**OWEN: Choose Highlight Palette**), each of the four palette cards is now clickable: click
+  one (or focus it and press Enter/Space) to apply it immediately, with a hover affordance and
+  a **Selected** badge marking the applied palette. The Quick Pick flow still works exactly as
+  before.
+
+### Internal
+
+- The parameter-sweep logic (`OWEN: Run Parameter Sweep`) was refactored into a pure,
+  vscode-free core (`src/workflows/sweepCore.ts`) and now has unit tests covering parameter
+  expansion, regex value substitution, k-eff parsing, and manifest/summary generation. MCNP
+  line-length logic is unit-tested too. See `docs/SWEEP_VALIDATION.md` and the extended sweep
+  scenario in `docs/OPENMC_EVALUATION.md`.
+
 ## [0.1.5] — 2026-06-04
 
 See your highlight colors **before** you pick them.

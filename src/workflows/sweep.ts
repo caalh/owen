@@ -3,42 +3,18 @@ import * as path from 'path';
 import { spawn } from 'child_process';
 import { detectMonteCarloLanguageFromText, MonteCarloLanguage } from '../util/detectLanguage';
 import { planLaunch } from './runner';
+import {
+    SweepConfig,
+    RunRecord,
+    parseKeff,
+    cartesian,
+    applyParameters,
+    runDirName,
+    buildManifest,
+    buildSummaryTsv,
+} from './sweepCore';
 
-export interface SweepParameter {
-    name: string;
-    values: Array<string | number>;
-    /** Regex matched against baseFile. Group 1 is replaced with each parameter value. */
-    pattern: string;
-}
-
-export interface SweepConfig {
-    baseFile: string;
-    parameters: SweepParameter[];
-    output: { dir: string };
-    /** Optional explicit language override; otherwise detected from baseFile extension. */
-    language?: MonteCarloLanguage;
-}
-
-interface RunRecord {
-    index: number;
-    parameters: Record<string, string | number>;
-    inputFile: string;
-    outputDir: string;
-    keff?: number | null;
-    exitCode: number | null;
-    stdoutPath: string;
-}
-
-const KEFF_RE = /final\s+estimated\s+combined\s+collision\s*\/\s*absorption\s*\/\s*track[-\s]length\s+keff[^=:\d]*[=:]?\s*([0-9.]+)/i;
-const KEFF_OPENMC_RE = /Combined\s+k-?effective\s*=\s*([0-9.]+)/i;
-const KEFF_FALLBACK_RE = /\bk-?eff\s*[=:]\s*([0-9.]+)/i;
-
-function parseKeff(text: string): number | null {
-    const m = text.match(KEFF_RE) || text.match(KEFF_OPENMC_RE) || text.match(KEFF_FALLBACK_RE);
-    if (!m) return null;
-    const v = parseFloat(m[1]);
-    return isNaN(v) ? null : v;
-}
+export { SweepParameter, SweepConfig } from './sweepCore';
 
 function languageForFile(filename: string, baseText: string): MonteCarloLanguage {
     const ext = path.extname(filename).toLowerCase();
@@ -50,31 +26,6 @@ function languageForFile(filename: string, baseText: string): MonteCarloLanguage
         return detected ?? 'mcnp';
     }
     return 'mcnp';
-}
-
-function cartesian(parameters: SweepParameter[]): Record<string, string | number>[] {
-    if (parameters.length === 0) return [{}];
-    const [head, ...tail] = parameters;
-    const rest = cartesian(tail);
-    const out: Record<string, string | number>[] = [];
-    for (const v of head.values) {
-        for (const r of rest) out.push({ [head.name]: v, ...r });
-    }
-    return out;
-}
-
-function applyParameters(text: string, params: Record<string, string | number>, schema: SweepParameter[]): string {
-    let out = text;
-    for (const p of schema) {
-        const value = String(params[p.name]);
-        const re = new RegExp(p.pattern);
-        out = out.replace(re, (match, group: string | undefined) => {
-            if (group === undefined) return value;
-            const idx = match.indexOf(group);
-            return match.slice(0, idx) + value + match.slice(idx + group.length);
-        });
-    }
-    return out;
 }
 
 async function fileBytes(uri: vscode.Uri): Promise<Buffer> {
@@ -139,7 +90,8 @@ export async function runSweepFromConfig(configUri: vscode.Uri): Promise<void> {
         return;
     }
 
-    const language = parsed.language ?? languageForFile(baseFilePath, baseText);
+    const language = (parsed.language as MonteCarloLanguage | undefined)
+        ?? languageForFile(baseFilePath, baseText);
     const combinations = cartesian(parsed.parameters);
     const baseName = path.basename(baseFilePath);
 
@@ -156,7 +108,7 @@ export async function runSweepFromConfig(configUri: vscode.Uri): Promise<void> {
         async (progress) => {
             for (let i = 0; i < combinations.length; i++) {
                 const combo = combinations[i];
-                const runDir = path.join(outDir, `run_${String(i).padStart(3, '0')}`);
+                const runDir = path.join(outDir, runDirName(i));
                 await vscode.workspace.fs.createDirectory(vscode.Uri.file(runDir));
                 const inputPath = path.join(runDir, baseName);
                 const mutated = applyParameters(baseText, combo, parsed.parameters);
@@ -195,25 +147,12 @@ export async function runSweepFromConfig(configUri: vscode.Uri): Promise<void> {
         },
     );
 
-    const summary = {
-        baseFile: baseFilePath,
-        language,
-        parameters: parsed.parameters,
-        runs: records,
-    };
+    const manifest = buildManifest(baseFilePath, language, parsed.parameters, records);
     const manifestPath = path.join(outDir, 'sweep-manifest.json');
-    await writeText(vscode.Uri.file(manifestPath), JSON.stringify(summary, null, 2));
+    await writeText(vscode.Uri.file(manifestPath), JSON.stringify(manifest, null, 2));
 
-    const tableLines = [
-        ['index', ...parsed.parameters.map((p) => p.name), 'exit', 'keff'].join('\t'),
-        ...records.map((r) => [
-            r.index,
-            ...parsed.parameters.map((p) => r.parameters[p.name]),
-            r.exitCode ?? 'n/a',
-            r.keff ?? 'n/a',
-        ].join('\t')),
-    ];
-    await writeText(vscode.Uri.file(path.join(outDir, 'sweep-summary.tsv')), tableLines.join('\n') + '\n');
+    const tsv = buildSummaryTsv(parsed.parameters, records);
+    await writeText(vscode.Uri.file(path.join(outDir, 'sweep-summary.tsv')), tsv + '\n');
 
     vscode.window.showInformationMessage(
         `OWEN: parameter sweep complete (${records.length} runs). Manifest: ${manifestPath}`,

@@ -12,6 +12,79 @@ division-wide changelog is `AI_CHANGELOG.md` in the BelvoirDynamics monorepo roo
 
 ---
 
+## 2026-06-22 — v0.1.6 — Invisible-char toggle, MCNP line guard, editor-title menu, clickable palettes, sweep tests
+
+**AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)
+
+Version bumped `0.1.5` → `0.1.6` in `package.json` and `package-lock.json`. Four UX features
+plus pure-logic unit tests for the parameter sweep. (The feature code landed on `main` in
+commit `e1a1e2b`; this release cuts the version, changelogs, and extended sweep docs.)
+
+### A — Toggle invisible characters + MCNP line-length guard
+
+- **`src/decorations/invisibles.ts` (new).** `OWEN: Toggle Invisible Characters`
+  (`owen.toggleInvisibleCharacters`) flips **only** `editor.renderWhitespace` (`all`) and
+  `editor.renderControlCharacters` (`true`) at the Global target. The prior global values are
+  captured in `globalState` on toggle-on and restored verbatim on toggle-off; a sentinel
+  (`\u0000owen-unset`) distinguishes "user had no explicit value" so we revert to default
+  rather than forcing one. Never touches unrelated settings.
+- **`src/decorations/lineLength.ts` (new, pure).** `findOverlengthLines(text, limit)` and
+  `expandedWidth()` compute over-limit MCNP lines with **tab expansion** to 8-column stops, so
+  a visually-short line with a tab is still flagged. `MCNP_DEFAULT_LINE_LIMIT = 80`.
+- **`src/decorations/mcnpLineGuard.ts` (new).** Three reinforcing signals for the configurable
+  limit (`owen.mcnp.lineLengthLimit`, default 80, set 128 for MCNP6.2+): (1) a **language-scoped
+  ruler** written programmatically to `[mcnp].editor.rulers` via `ensureMcnpRuler()` — chosen
+  over `contributes.configurationDefaults` so the ruler tracks the *configurable* limit, and it
+  refuses to clobber a user's own MCNP ruler; (2) a `DiagnosticCollection` (Problems + squiggle)
+  with a clear "characters past column N are silently ignored" message; (3) a tail decoration on
+  the overflow. Kept in sync on open/change/active-editor/config-change.
+- **`src/decorations/index.ts` (new).** `registerDecorations()` wires both; called from
+  `extension.ts`.
+
+### B — OWEN in the editor title bar
+
+- **`package.json`.** New `owen.editorTitleMenu` submenu (icon `$(beaker)`) contributed to
+  `editor/title` group `navigation@100`, gated by
+  `when: editorLangId =~ /^(mcnp|serpent|scone|python)$/`. It mirrors the right-click
+  `owen.contextMenu` actions, grouped analyze/build/run/view/help.
+
+### C — Click-to-apply palette in the preview
+
+- **`src/highlight/previewPanel.ts`.** Palette cards are now `role="button"`/`tabindex="0"`;
+  click or Enter/Space posts `{type:'select', palette}` to the extension. Added `.selected`
+  state + a **Selected** badge and `postSelected()` to reflect the applied palette; hover/active
+  affordances. The webview→extension `select` message is handled in `showPalettePreview`'s
+  `onDidReceiveMessage` via an `onSelect` callback.
+- **`src/highlight/index.ts`.** `chooseHighlightPalette` passes an `onSelect` that runs
+  `applySelection(language, palette)` (writes `owen.highlight.<lang>.palette` + `applyPalettes()`)
+  then `postSelected()`. The Quick Pick `pickPaletteWithPreview` flow is unchanged.
+
+### D — Parametric sweep tests + docs
+
+- **`src/workflows/sweepCore.ts` (new, pure).** Extracted the deterministic sweep logic from
+  `sweep.ts`: `cartesian()` (parameter expansion), `applyParameters()` (capture-group-1 regex
+  substitution that preserves surrounding text), `parseKeff()` (Serpent/OpenMC/fallback regexes,
+  `null` → "n/a"), `runDirName()`, `buildManifest()`, `buildSummaryTsv()`. `sweep.ts` now
+  delegates to these.
+- **`src/test/suite/sweep.test.ts` (new).** Mocha tdd tests for expansion, substitution (incl.
+  "don't touch identical digits elsewhere"), k-eff parsing (incl. miss → null and an increasing
+  enrichment→k-eff trend), and manifest/TSV layout (incl. failed-run `n/a`). No OpenMC is run.
+- **`src/test/suite/lineLength.test.ts` (new).** Tests the line-length core (default 80, tab
+  expansion, custom 128 limit).
+- **`docs/SWEEP_VALIDATION.md` (new)** and an **extended `docs/OPENMC_EVALUATION.md` T10**
+  section with a concrete worked enrichment sweep (base `pincell.py`, `sweep.json`, expected
+  `sweep-summary.tsv` with monotonically increasing k-eff).
+
+### Verification & caveats
+
+- `tsc --noEmit` + `node esbuild.js` clean; VSIX `owen-neutronics-0.1.6.vsix` packaged.
+- Unit tests are pure-logic and need no OpenMC; they run under `@vscode/test-electron` which
+  needs a windowing/electron environment (may need a local `npm test` run on the user's machine
+  if a headless launch isn't available in CI/agent).
+- No new dependencies, no forced user settings beyond the documented toggle/ruler. Identity
+  (`name`/`publisher`/`displayName`/command ids) unchanged. Marketplace + Open VSX republish
+  need the user's tokens.
+
 ## 2026-06-04 — v0.1.5 — Highlight-palette preview webview (all 4 palettes at once)
 
 **AI Agent:** Claude (`claude-opus-4-8-thinking-high`, Cursor IDE)

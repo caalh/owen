@@ -75,6 +75,7 @@ const SAMPLES: Record<Language, SampleLine[]> = {
 let currentPanel: vscode.WebviewPanel | undefined;
 let webviewReady = false;
 let pendingHighlight: PaletteId | undefined;
+let selectHandler: ((palette: PaletteId) => void) | undefined;
 
 function escapeHtml(s: string): string {
     return s
@@ -105,21 +106,23 @@ function renderSample(language: Language, palette: PaletteId): string {
 }
 
 /** Build the four labeled palette blocks for the selected language. */
-function renderBlocks(language: Language): string {
+function renderBlocks(language: Language, selectedId: PaletteId): string {
     return PALETTE_IDS.map((id) => {
         const sample = renderSample(language, id);
-        return `<section class="card" data-palette="${id}" id="palette-${id}">
+        const selectedClass = id === selectedId ? ' selected' : '';
+        return `<section class="card${selectedClass}" data-palette="${id}" id="palette-${id}" role="button" tabindex="0" title="Click to apply the ${escapeHtml(PALETTE_LABELS[id])} palette">
   <header class="card-head">
     <span class="card-title">${escapeHtml(PALETTE_LABELS[id])}</span>
     <span class="card-desc">${escapeHtml(PALETTE_DESCRIPTIONS[id])}</span>
+    <span class="card-badge">Selected</span>
   </header>
   <pre class="code">${sample}</pre>
 </section>`;
     }).join('\n');
 }
 
-function buildHtml(language: Language): string {
-    const blocks = renderBlocks(language);
+function buildHtml(language: Language, selectedId: PaletteId): string {
+    const blocks = renderBlocks(language, selectedId);
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,11 +150,27 @@ function buildHtml(language: Language): string {
     border-radius: 8px;
     overflow: hidden;
     background: var(--vscode-editor-background, #1e1e1e);
-    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    cursor: pointer;
   }
+  .card:hover {
+    border-color: var(--vscode-focusBorder, #4ea1ff);
+    box-shadow: 0 0 0 1px var(--vscode-focusBorder, #4ea1ff);
+  }
+  .card:active { transform: translateY(1px); }
+  .card:focus-visible {
+    outline: 2px solid var(--vscode-focusBorder, #4ea1ff);
+    outline-offset: 2px;
+  }
+  /* Quick Pick navigation highlight (hovered item in the picker). */
   .card.active {
     border-color: var(--vscode-focusBorder, #4ea1ff);
     box-shadow: 0 0 0 2px var(--vscode-focusBorder, #4ea1ff);
+  }
+  /* The currently-applied palette. */
+  .card.selected {
+    border-color: var(--vscode-charts-green, #89d185);
+    box-shadow: 0 0 0 2px var(--vscode-charts-green, #89d185);
   }
   .card-head {
     display: flex;
@@ -163,6 +182,19 @@ function buildHtml(language: Language): string {
   }
   .card-title { font-size: 13px; font-weight: 600; }
   .card-desc { font-size: 11px; opacity: 0.65; }
+  .card-badge {
+    display: none;
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--vscode-charts-green, #89d185);
+    border: 1px solid var(--vscode-charts-green, #89d185);
+    border-radius: 10px;
+    padding: 1px 8px;
+  }
+  .card.selected .card-badge { display: inline-block; }
   pre.code {
     margin: 0;
     padding: 12px 14px;
@@ -178,7 +210,7 @@ function buildHtml(language: Language): string {
 </head>
 <body>
   <h1>${escapeHtml(LANGUAGE_LABELS[language])} highlight palettes</h1>
-  <p class="sub">Compare all four palettes on the same sample, then pick one in the Quick Pick. The hovered palette is outlined here.</p>
+  <p class="sub">Click a card to apply that palette, or pick one in the Quick Pick. The applied palette is marked “Selected”; the Quick Pick’s hovered palette is outlined.</p>
   <div class="grid">
     ${blocks}
   </div>
@@ -193,9 +225,30 @@ function buildHtml(language: Language): string {
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
+    function setSelected(palette) {
+      document.querySelectorAll('.card').forEach((el) => {
+        el.classList.toggle('selected', el.dataset.palette === palette);
+      });
+    }
+    function choose(palette) {
+      if (!palette) return;
+      setSelected(palette);
+      vscode.postMessage({ type: 'select', palette });
+    }
+    document.querySelectorAll('.card').forEach((el) => {
+      el.addEventListener('click', () => choose(el.dataset.palette));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          choose(el.dataset.palette);
+        }
+      });
+    });
     window.addEventListener('message', (event) => {
       const data = event.data;
-      if (data && data.type === 'highlight') setActive(data.palette);
+      if (!data) return;
+      if (data.type === 'highlight') setActive(data.palette);
+      else if (data.type === 'selected') setSelected(data.palette);
     });
     vscode.postMessage({ type: 'ready' });
   </script>
@@ -206,11 +259,19 @@ function buildHtml(language: Language): string {
 /**
  * Open (or reveal and re-target) the palette-preview panel for a language. The
  * panel renders all four palettes side by side so the user can compare before
- * choosing. Safe to call repeatedly; reuses a single panel.
+ * choosing. Each card is clickable: clicking applies that palette via the
+ * supplied `onSelect` callback. `selectedId` marks the currently-applied
+ * palette. Safe to call repeatedly; reuses a single panel.
  */
-export function showPalettePreview(context: vscode.ExtensionContext, language: Language): void {
+export function showPalettePreview(
+    context: vscode.ExtensionContext,
+    language: Language,
+    selectedId: PaletteId,
+    onSelect: (palette: PaletteId) => void,
+): void {
     webviewReady = false;
     pendingHighlight = undefined;
+    selectHandler = onSelect;
 
     if (!currentPanel) {
         currentPanel = vscode.window.createWebviewPanel(
@@ -224,15 +285,19 @@ export function showPalettePreview(context: vscode.ExtensionContext, language: L
                 currentPanel = undefined;
                 webviewReady = false;
                 pendingHighlight = undefined;
+                selectHandler = undefined;
             },
             null,
             context.subscriptions,
         );
         currentPanel.webview.onDidReceiveMessage(
             (msg) => {
-                if (msg && msg.type === 'ready') {
+                if (!msg) return;
+                if (msg.type === 'ready') {
                     webviewReady = true;
                     if (pendingHighlight) postHighlight(pendingHighlight);
+                } else if (msg.type === 'select' && typeof msg.palette === 'string') {
+                    selectHandler?.(msg.palette as PaletteId);
                 }
             },
             null,
@@ -243,7 +308,7 @@ export function showPalettePreview(context: vscode.ExtensionContext, language: L
     }
 
     currentPanel.title = `OWEN: ${LANGUAGE_LABELS[language]} Palette Preview`;
-    currentPanel.webview.html = buildHtml(language);
+    currentPanel.webview.html = buildHtml(language, selectedId);
 }
 
 /** Outline/scroll the preview to a palette (no-op if the panel is closed). */
@@ -251,5 +316,12 @@ export function postHighlight(palette: PaletteId): void {
     pendingHighlight = palette;
     if (currentPanel && webviewReady) {
         currentPanel.webview.postMessage({ type: 'highlight', palette });
+    }
+}
+
+/** Mark a palette as the applied/"selected" one (no-op if the panel is closed). */
+export function postSelected(palette: PaletteId): void {
+    if (currentPanel && webviewReady) {
+        currentPanel.webview.postMessage({ type: 'selected', palette });
     }
 }

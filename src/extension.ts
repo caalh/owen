@@ -9,12 +9,14 @@ import { registerSearchReactorLibrary } from './community/browser';
 import { registerGeometryPreview } from './preview/webview';
 import { registerSnippetCompletions } from './completions/snippets';
 import { registerHighlightPalettes } from './highlight';
+import { registerDecorations } from './decorations';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('OWEN extension activated');
 
     registerSnippetCompletions(context);
     registerHighlightPalettes(context);
+    registerDecorations(context);
 
     context.subscriptions.push(
         vscode.commands.registerCommand('owen.openLatticeBuilder', () => {

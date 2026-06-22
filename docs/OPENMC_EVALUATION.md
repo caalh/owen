@@ -416,6 +416,84 @@ lists `index / enrichment / exit / keff` with **increasing k-eff vs. enrichment*
 stdout (`Combined k-effective`) → Partial. Note: `model.run()` keeps OpenMC's normal stdout,
 so the parser should find it.
 
+### Worked enrichment sweep (concrete, hands-on)
+
+This is a fully specified end-to-end scenario you can copy verbatim. It is the same logic the
+unit tests in `src/test/suite/sweep.test.ts` exercise (parameter expansion, capture-group-1
+substitution, `Combined k-effective` parsing, manifest/TSV assembly) — here run for real
+against OpenMC. See `docs/SWEEP_VALIDATION.md` for the full validation checklist.
+
+**1. Base deck `pincell.py`** — a single PWR UO₂ pin (infinite lattice, reflective boundary).
+The one enrichment-bearing line is marked; the sweep rewrites only the captured number:
+
+```python
+import openmc
+
+uo2 = openmc.Material(name='UO2')
+uo2.set_density('g/cm3', 10.42)
+uo2.add_nuclide('U235', 0.040, percent_type='ao')   # ← swept (capture group)
+uo2.add_nuclide('U238', 0.960, percent_type='ao')
+uo2.add_nuclide('O16', 2.0, percent_type='ao')
+
+water = openmc.Material(name='h2o')
+water.set_density('g/cm3', 0.74)
+water.add_nuclide('H1', 2.0); water.add_nuclide('O16', 1.0)
+water.add_s_alpha_beta('c_H_in_H2O')
+
+materials = openmc.Materials([uo2, water])
+
+fuel_or = openmc.ZCylinder(r=0.4096)
+pitch = 1.26
+box = openmc.model.RectangularPrism(pitch, pitch, boundary_type='reflective')
+fuel = openmc.Cell(fill=uo2, region=-fuel_or)
+mod  = openmc.Cell(fill=water, region=+fuel_or & -box)
+geometry = openmc.Geometry([fuel, mod])
+
+settings = openmc.Settings()
+settings.particles = 2000
+settings.batches = 100
+settings.inactive = 20
+settings.source = openmc.IndependentSource(
+    space=openmc.stats.Box((-0.6, -0.6, -1), (0.6, 0.6, 1)))
+
+model = openmc.model.Model(geometry, materials, settings)
+model.run()
+```
+
+**2. `sweep.json`** (same as above): one parameter `enrichment` over
+`[0.02, 0.03, 0.04, 0.05]` with pattern `add_nuclide\('U235', ([0-9.]+)`.
+
+**3. Run** → **OWEN: Run Parameter Sweep** → pick `sweep.json`.
+
+**Expected output tree:**
+
+```
+sweep_out/
+  run_000/  pincell.py (U235=0.02)  owen-sweep.log  statepoint.100.h5  summary.h5
+  run_001/  pincell.py (U235=0.03)  owen-sweep.log  statepoint.100.h5  summary.h5
+  run_002/  pincell.py (U235=0.04)  owen-sweep.log  statepoint.100.h5  summary.h5
+  run_003/  pincell.py (U235=0.05)  owen-sweep.log  statepoint.100.h5  summary.h5
+  sweep-manifest.json
+  sweep-summary.tsv
+```
+
+**Expected `sweep-summary.tsv`** (k-eff rises monotonically with enrichment; absolute values
+depend on your cross-section library/temperature — ENDF/B-VII.1 at room temperature gives
+roughly the following, ±~0.002 statistical):
+
+```
+index	enrichment	exit	keff
+0	0.02	0	0.92xxx
+1	0.03	0	1.05xxx
+2	0.04	0	1.14xxx
+3	0.05	0	1.18xxx
+```
+
+**Pass:** all four `exit = 0`, `keff` strictly increasing, no `n/a`. **Partial:** runs finish
+but `keff = n/a` (OpenMC stdout didn't contain `Combined k-effective` — e.g. output was
+redirected). **Blocked:** runs fail for environment reasons (`OPENMC_CROSS_SECTIONS` unset,
+wrong `owen.openmc.pythonExecutable`) — not an OWEN bug.
+
 **Score:** ☐ Pass ☐ Partial ☐ Fail ☐ Blocked — notes: ________________
 
 ---
